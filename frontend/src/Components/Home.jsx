@@ -12,10 +12,18 @@ const Home = () => {
       <div className='mt-10 mx-10 flex flex-row gap-10'>
         <ProfileCard />
         <div className='display block'>
-        <CreatePost/>
-        <PostsComponent />
+          <CreatePost />
+          <PostsComponent />
         </div>
-        <UserList />
+        <div className='w-auto h-full bg-white rounded-lg shadow-lg  p-4'>
+        <p className='text-blue-500 text-lg font-semibold'>Add to your feed</p>
+          <UserList />
+          <UserList />
+          <UserList />
+          <UserList />
+          <UserList />
+          <UserList />
+        </div>
       </div>
     </div>
   )

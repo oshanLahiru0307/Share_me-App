@@ -1,7 +1,8 @@
 import React from 'react'
-import { Avatar, Button } from 'antd'
+import { Avatar, Button} from 'antd'
 
 const CreatePost = () => {
+    
     return (
         <div>
             <div className='w-auto bg-white h-auto rounded-lg shadow-lg  p-6 flex flex-row gap-2 items-center'>
