@@ -12,7 +12,7 @@ const NavigationBar = () => {
       <div className='flex items-center'>
         <img src={logo} alt="Logo" style={{ width: "50px", height: "50px" }} />
         <h1 className='mx-3 text-blue-500 font-semibold text-lg'>Share Me</h1>
-        <Search placeholder="Search" allowClear style={{ width: 300 }} className='' />
+        <Search placeholder="Search" allowClear style={{ width: 300 }} />
       </div>
       <div>
         <ul className='flex items-center space-x-12'>

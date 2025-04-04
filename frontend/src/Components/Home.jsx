@@ -1,13 +1,19 @@
 import React from 'react'
 import NavBar from './NavigationBar'
 import ProfileCard from './ProfileCard'
+import PostsComponent from './PostsComponent'
+import UserList from './UserList'
 
 const Home = () => {
   return (
-    <div className='bg-slate-200 h-screen'>
-      <NavBar/>
-      <div className='mt-10 mx-10'>
-        <ProfileCard/>
+    <div className='bg-slate-200 h-auto'>
+      <NavBar />
+      <div className='mt-10 mx-10 flex flex-row gap-10'>
+        <ProfileCard />
+        <div className='display block'>
+        <PostsComponent />
+        </div>
+        <UserList />
       </div>
     </div>
   )
