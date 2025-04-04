@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div className='bg-slate-200 h-screen'>
       <NavBar/>
-      <div className='my-6 mx-4'>
+      <div className='mt-10 mx-10'>
         <ProfileCard/>
       </div>
     </div>
