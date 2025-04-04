@@ -19,8 +19,9 @@ const Home = () => {
           <PostsComponent />
           <PostsComponent />
         </div>
-        <div className="w-auto h-[550px] bg-white rounded-lg shadow-lg p-4 sticky top-5 overflow-y-auto">
-          <p className="text-blue-500 text-lg font-semibold">Add to your feed</p>
+        <div className="w-auto h-[550px] bg-white rounded-lg shadow-lg p-4 sticky top-5 ">
+          <p className="text-blue-500 text-lg font-semibold pb-2">Add to your feed</p>
+          <div className='h-[480px] sticky top-5 overflow-y-auto pb-4'>
           <UserList />
           <UserList />
           <UserList />
@@ -34,6 +35,7 @@ const Home = () => {
           <UserList />
           <UserList />
           <UserList />
+          </div>
         </div>
       </div>
     </div>
