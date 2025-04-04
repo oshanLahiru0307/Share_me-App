@@ -1,5 +1,6 @@
 import React from 'react'
 import { Avatar } from 'antd'
+import {Link} from 'react-router-dom'
 import logo from '../assets/airbnb_1724634.png'
 
 const NavigationBar = () => {
@@ -11,12 +12,12 @@ const NavigationBar = () => {
       </div>
       <div>
         <ul className='flex items-center space-x-8'>
-          <li>Home</li>
-          <li>My Network</li>
-          <li>Events</li>
-          <li>Message</li>
-          <li>Notification</li>
-          <li>Learning</li>
+          <li><Link to="">Home</Link></li>
+          <li><Link to="">My Network</Link></li>
+          <li><Link to="">Events</Link></li>
+          <li><Link to="">Message</Link></li>
+          <li><Link to="">Notification</Link></li>
+          <li><Link to="">Learning</Link></li>
         </ul>
       </div>
       <div>
