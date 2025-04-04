@@ -5,7 +5,7 @@ import { GlobalOutlined, BookOutlined, TeamOutlined } from '@ant-design/icons'
 
 const ProfileCard = () => {
     return (
-        <div>
+        <div className='sticky top-5'>
             <div className='w-auto bg-white h-auto rounded-lg shadow-lg relative '>
                 <div style={{
                     height: '100px',

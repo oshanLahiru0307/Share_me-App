@@ -8,7 +8,8 @@ const { Search } = Input
 
 const NavigationBar = () => {
   return (
-    <div className='w-full flex justify-between items-center bg-gradient-to-r from-blue-50 to-blue-500  shadow-lg px-16 py-3'>
+    <div>
+      <div className='w-full flex justify-between items-center bg-gradient-to-r from-blue-50 to-blue-500  shadow-lg px-16 py-3 sticky'>
       <div className='flex items-center'>
         <img src={logo} alt="Logo" style={{ width: "50px", height: "50px" }} />
         <h1 className='mx-3 text-blue-500 font-semibold text-lg'>Share Me</h1>
@@ -59,6 +60,7 @@ const NavigationBar = () => {
         <Avatar size={38} src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
       </div>
 
+    </div>
     </div>
   )
 }
