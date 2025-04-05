@@ -6,6 +6,7 @@ import UserList from './UserList'
 import CreatePost from './CreatePost'
 import { FloatButton } from 'antd'
 import LinksCard from './Links'
+import { RocketFilled} from '@ant-design/icons'
 
 const Home = () => {
   return (
@@ -46,7 +47,7 @@ const Home = () => {
 
       </div>
       <div>
-        <FloatButton />
+        <FloatButton type="primary" icon = {<RocketFilled className="text-white"/>} />
       </div>
     </div>
   )

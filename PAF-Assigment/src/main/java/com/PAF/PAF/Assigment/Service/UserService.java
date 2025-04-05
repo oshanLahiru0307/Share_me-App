@@ -2,9 +2,9 @@ package com.PAF.PAF.Assigment.Service;
 
 import com.PAF.PAF.Assigment.Entity.UserEntity;
 import com.PAF.PAF.Assigment.Repository.UserRepo;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,22 +21,27 @@ public class UserService {
     }
 
     public List<UserEntity> getAllUsers() {
-        List<UserEntity> users = userRepo.findAll();
-        return users;
+        return userRepo.findAll();
     }
 
-    public Optional<UserEntity> getUserById(int id) {
+    public UserEntity getUserById(String id) {
         Optional<UserEntity> user = userRepo.findById(id);
-        return user;
+        return user.orElse(null);
     }
 
-    public Optional<UserEntity> deleteUser(int id){
-        Optional<UserEntity> user = userRepo.findById(id);
+    public UserEntity getUserByEmail(String email) {
+        Optional<UserEntity> user = userRepo.findByEmail(email);
+        return user.orElse(null);
+    }
+
+    public UserEntity updateUser(UserEntity user) {
+        return userRepo.save(user);
+    }
+
+    public UserEntity deleteUser(String id) {
+        UserEntity user = getUserById(id);
         userRepo.deleteById(id);
         return user;
     }
 
-    public UserEntity updateUser(int id, UserEntity user) {
-        return userRepo.save(user);
-    }
 }

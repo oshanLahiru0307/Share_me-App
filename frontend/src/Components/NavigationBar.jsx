@@ -2,7 +2,7 @@ import React from 'react'
 import { Avatar, Input} from 'antd'
 import { Link } from 'react-router-dom'
 import logo from '../assets/airbnb_1724634.png'
-import { HomeOutlined, UsergroupAddOutlined, MessageOutlined, BellOutlined, SlackOutlined, LaptopOutlined} from '@ant-design/icons'
+import { HomeFilled, UsergroupAddOutlined, MessageOutlined, BellOutlined, SlackOutlined, LaptopOutlined} from '@ant-design/icons'
 
 const { Search } = Input
 
@@ -18,8 +18,8 @@ const NavigationBar = () => {
       <div>
         <ul className='flex items-center space-x-12'>
           <li>
-            <Link className='flex flex-col items-center gap-2' to="">
-              <HomeOutlined />
+            <Link className='flex flex-col items-center gap-2 text-blue-950' to="">
+              <HomeFilled />
               <p className='text-xs font-semibold'>Home</p>
             </Link>
           </li>

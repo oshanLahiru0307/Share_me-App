@@ -1,7 +1,7 @@
 import { Avatar } from 'antd'
 import { Link } from 'react-router-dom'
 import React from 'react'
-import { GlobalOutlined, BookOutlined, TeamOutlined } from '@ant-design/icons'
+import { GlobalOutlined, BookOutlined, TeamOutlined} from '@ant-design/icons'
 
 const ProfileCard = () => {
     return (
@@ -29,14 +29,14 @@ const ProfileCard = () => {
             </div>
 
             <div className='w-auto bg-white h-auto rounded-lg shadow-lg mt-6 p-4'>
-                <p className='text-m text-black my-1 font-semibold'>Profile View <span className='float-right text-sky-500'>44</span></p>
-                <p className='text-m text-black my-1 font-semibold'>Profile View <span className='float-right text-sky-500'>128</span></p>
+                <p className='text-sm text-black my-1 font-semibold'>Profile View <span className='float-right text-sky-500'>44</span></p>
+                <p className='text-sm text-black my-1 font-semibold'>Profile View <span className='float-right text-sky-500'>128</span></p>
             </div>
 
             <div className='w-auto bg-white h-auto rounded-lg shadow-lg mt-6 p-4 flex flex-col'>
-                <Link className='text-m text-black my-1 font-semibold'><BookOutlined className='mr-2' />Saved items</Link>
-                <Link className='text-m text-black my-1 font-semibold'><GlobalOutlined className='mr-2' />Newsletters</Link>
-                <Link className='text-m text-black my-1 font-semibold'><TeamOutlined className='mr-2' />Groups</Link>
+                <Link className='text-m text-black my-1 font-semibold'><BookOutlined className='mr-2 text-pink-500' />Saved items</Link>
+                <Link className='text-m text-black my-1 font-semibold'><GlobalOutlined className='mr-2 text-blue-500' />Newsletters</Link>
+                <Link className='text-m text-black my-1 font-semibold'><TeamOutlined className='mr-2 text-purple-500' />Groups</Link>
             </div>
         </div>
     )

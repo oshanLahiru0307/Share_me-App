@@ -1,55 +1,108 @@
 package com.PAF.PAF.Assigment.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Document(collection = "Users")
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int UserId;
-    private String UserName;
-    private String Password;
-    private String Email;
+    private String id;
+    private String name;
+    private String email;
+    private String password;
+    private String title;
+    private String address;
+    private String coverImg;
+    private String profileImg;
+    private List<String> friendsList;
+    private List<String> postsList;
 
-    public int getUserId() {
-        return UserId;
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        UserId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getPassword() {
-        return Password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        Password = password;
-    }
-
-    public String getUserName() {
-        return UserName;
-    }
-
-    public void setUserName(String userName) {
-        UserName = userName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCoverImg() {
+        return coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
+
+    public List<String> getFriendsList() {
+        return friendsList;
+    }
+
+    public void setFriendsList(List<String> friendsList) {
+        this.friendsList = friendsList;
+    }
+
+    public List<String> getPostsList() {
+        return postsList;
+    }
+
+    public void setPostsList(List<String> postsList) {
+        this.postsList = postsList;
     }
 }
