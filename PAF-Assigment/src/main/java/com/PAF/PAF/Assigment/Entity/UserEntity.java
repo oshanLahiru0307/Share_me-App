@@ -19,7 +19,7 @@ public class UserEntity {
     private String name;
     private String email;
     private String password;
-    private String title;
+    private String occupation;
     private String address;
     private String coverImg;
     private String profileImg;
@@ -58,12 +58,12 @@ public class UserEntity {
         this.password = password;
     }
 
-    public String getTitle() {
-        return title;
+    public String getOccupation() {
+        return occupation;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
     }
 
     public String getAddress() {
