@@ -8,7 +8,7 @@ const { Search } = Input
 
 const NavigationBar = () => {
   return (
-    <div>
+    <div className='sticky top-0 z-10'>
       <div className='w-full flex justify-between items-center bg-gradient-to-r from-blue-50 to-blue-500  shadow-lg px-16 py-3 sticky'>
       <div className='flex items-center'>
         <img src={logo} alt="Logo" style={{ width: "50px", height: "50px" }} />

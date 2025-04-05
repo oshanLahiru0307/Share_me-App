@@ -4,39 +4,49 @@ import ProfileCard from './ProfileCard'
 import PostsComponent from './PostsComponent'
 import UserList from './UserList'
 import CreatePost from './CreatePost'
+import { FloatButton } from 'antd'
+import LinksCard from './Links'
 
 const Home = () => {
   return (
-    <div className='bg-slate-200 h-auto'>
+    <div className='bg-slate-200 h-auto '>
       <NavBar />
       <div className='mt-10 mx-10 flex flex-row gap-10'>
         <div>
           <ProfileCard />
         </div>
-
         <div className='display block'>
           <CreatePost />
           <PostsComponent />
           <PostsComponent />
         </div>
-        <div className="w-auto h-[550px] bg-white rounded-lg shadow-lg p-4 sticky top-5 ">
-          <p className="text-blue-500 text-lg font-semibold pb-2">Add to your feed</p>
-          <div className='h-[480px] sticky top-5 overflow-y-auto pb-4'>
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
-          <UserList />
+        <div>
+          <div className="w-auto h-[350px] bg-white rounded-lg shadow-lg p-4 sticky top-24 ">
+            <p className="text-blue-500 text-lg font-semibold pb-2">Add to your feed</p>
+            <div className='h-[250px] sticky top-5 overflow-y-auto pb-4'>
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+              <UserList />
+            </div>
+          </div>
+          <div className='sticky top-[470px]'>
+            <LinksCard />
           </div>
         </div>
+
+      </div>
+      <div>
+        <FloatButton />
       </div>
     </div>
   )
