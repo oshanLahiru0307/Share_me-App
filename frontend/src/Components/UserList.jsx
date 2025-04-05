@@ -4,7 +4,7 @@ import { Avatar, Button } from 'antd'
 const UserList = () => {
     return (
         <div>
-            <div className='w-[350px] bg-white rounded-lg border-2 border-blue-100 p-4 my-5 flex flex-row gap-10 items-center justify-between'>
+            <div className='w-[360px] bg-white rounded-lg border-2 border-blue-100 p-4 my-5 flex flex-row gap-10 items-center justify-between'>
                 <div className='flex flex-row gap-2 items-center' >
                 <Avatar style={{
                     border: '3px solid white',
