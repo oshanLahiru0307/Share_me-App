@@ -19,10 +19,17 @@ public class PostService {
         return postRepo.save(post);
     }
 
+    //get All posts...
     public List<PostEntity> getPosts(){
         return postRepo.findAll();
     }
 
+    //get All posts of An user...
+    public List<PostEntity> getPostsByUser(String user){
+        return postRepo.findByUserId(user);
+    }
+
+    //get single post...
     public PostEntity getPost(String id){
         Optional<PostEntity> post = postRepo.findById(id);
         return post.orElse(null);
@@ -42,10 +49,10 @@ public class PostService {
         PostEntity post = postRepo.findById(postId).orElse(null);
         if (post != null) {
             if (post.getLikes() == null) {
-                post.setLikes(new ArrayList<>());
+                post.setLikes(new HashMap<>());
             }
-            if (!post.getLikes().contains(userId)) {
-                post.getLikes().add(userId);
+            if (!post.getLikes().containsKey(userId)) {
+                post.getLikes().put(userId, true);
             }else{
                 post.getLikes().remove(userId);
             }
@@ -58,37 +65,28 @@ public class PostService {
         PostEntity post = postRepo.findById(postId).orElse(null);
         if (post != null) {
             if (post.getComments() == null) {
-                post.setComments(new ArrayList<>());
+                post.setComments(new HashMap<>());
             }
-            Map<String, String> comment = new HashMap<>();
-            comment.put("userId", userId);
-            comment.put("commentText", commentText);
-            post.getComments().add(comment);
+            post.getComments().put(userId, commentText);
             postRepo.save(post);
         }
         return post;
     }
 
-    public PostEntity editComment(String postId, String userId, String commentText, int commentIndex) {
+    public PostEntity editComment(String postId, String userId, String commentText) {
         PostEntity post = postRepo.findById(postId).orElse(null);
-        if (post != null && post.getComments() != null && commentIndex >= 0 && commentIndex < post.getComments().size()) {
-            Map<String, String> comment = post.getComments().get(commentIndex);
-            if (comment.get("userId").equals(userId)) {
-                comment.put("commentText", commentText);
-                postRepo.save(post);
-            }
+        if (post != null && post.getComments() != null && post.getComments().containsKey(userId)) {
+            post.getComments().put(userId, commentText);
+            postRepo.save(post);
         }
         return post;
     }
 
-    public PostEntity deleteComment(String postId, String userId, int commentIndex) {
+    public PostEntity deleteComment(String postId, String userId) {
         PostEntity post = postRepo.findById(postId).orElse(null);
-        if (post != null && post.getComments() != null && commentIndex >= 0 && commentIndex < post.getComments().size()) {
-            Map<String, String> comment = post.getComments().get(commentIndex);
-            if (comment.get("userId").equals(userId)) {
-                post.getComments().remove(commentIndex);
-                postRepo.save(post);
-            }
+        if (post != null && post.getComments() != null && post.getComments().containsKey(userId)) {
+            post.getComments().remove(userId);
+            postRepo.save(post);
         }
         return post;
     }

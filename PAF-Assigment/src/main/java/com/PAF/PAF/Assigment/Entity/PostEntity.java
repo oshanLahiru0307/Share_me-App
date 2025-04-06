@@ -22,8 +22,8 @@ public class PostEntity {
     private String occupation;
     private String caption;
     private List<String> imageUrls;
-    private List<String> likes; // List of user IDs who liked the post
-    private List<Map<String, String>> comments; // List of comments (userId, commentText)
+    private Map<String, Boolean> likes; // List of user IDs who liked the post
+    private Map<String, String> comments; // List of comments (userId, commentText)
 
     public String getId() {
         return id;
@@ -73,19 +73,19 @@ public class PostEntity {
         this.imageUrls = imageUrls;
     }
 
-    public List<String> getLikes() {
+    public Map<String, Boolean> getLikes() {
         return likes;
     }
 
-    public void setLikes(List<String> likes) {
+    public void setLikes(Map<String, Boolean> likes) {
         this.likes = likes;
     }
 
-    public List<Map<String, String>> getComments() {
+    public Map<String, String> getComments() {
         return comments;
     }
 
-    public void setComments(List<Map<String, String>> comments) {
+    public void setComments(Map<String, String> comments) {
         this.comments = comments;
     }
 }
