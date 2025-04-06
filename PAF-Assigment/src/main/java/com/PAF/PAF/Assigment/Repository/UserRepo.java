@@ -5,10 +5,14 @@ import com.PAF.PAF.Assigment.Entity.UserEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserRepo extends MongoRepository<UserEntity, String> {
     //user find by email...
     Optional<UserEntity> findByEmail(String email);
+
+    //get all friends of An user...
+    List<UserEntity> getFriendsListById(String userId);
 }
