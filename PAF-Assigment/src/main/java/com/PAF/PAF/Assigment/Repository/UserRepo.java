@@ -13,6 +13,4 @@ public interface UserRepo extends MongoRepository<UserEntity, String> {
     //user find by email...
     Optional<UserEntity> findByEmail(String email);
 
-    //get all friends of An user...
-    List<UserEntity> getFriendsListById(String userId);
 }

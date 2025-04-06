@@ -45,9 +45,6 @@ public class UserService {
         return user;
     }
 
-    public List<UserEntity> getFriendList(String userId) {
-        return userRepo.getFriendsListById(userId);
-    }
 
     public List<UserEntity> getUserFriends(String userId){
         UserEntity user = userRepo.findById(userId).orElse(null);

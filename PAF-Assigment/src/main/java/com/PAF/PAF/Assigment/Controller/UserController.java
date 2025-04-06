@@ -35,6 +35,16 @@ public class UserController {
         return userService.getUserByEmail(email);
     }
 
+    @GetMapping("/getUserFriends/{userId}")
+    public List<UserEntity> getUserFriends(@PathVariable String userId) {
+        return userService.getUserFriends(userId);
+    }
+
+    @PostMapping("/followUser/{userId}/{friendId}")
+    public UserEntity followUser(@PathVariable String userId, @PathVariable String friendId) {
+        return userService.followUnfollowUser(userId, friendId);
+    }
+
     @PatchMapping("/updateUser")
     public UserEntity updateUser(@RequestBody UserEntity user) {
         return userService.updateUser(user);
@@ -44,5 +54,6 @@ public class UserController {
     public UserEntity deleteUser(@PathVariable String id){
         return userService.deleteUser(id);
     }
+
 
 }
