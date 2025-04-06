@@ -29,22 +29,26 @@ public class PostController {
         return postService.getPostsByUser(userId);
     }
 
+    @PostMapping("/createPost")
+    public PostEntity createPost(@RequestBody PostEntity post){
+        return postService.createPost(post);
+    }
     @PostMapping("{postId}/userLike/{userId}")
     public PostEntity userLike(@PathVariable String postId, @PathVariable String userId){
         return postService.likeOrDislikePost(postId, userId);
     }
 
-    @PostMapping("{postId}/addComment/{userId}")
+    @PostMapping("/{postId}/addComment/{userId}")
     public PostEntity addComment(@PathVariable String postId, @PathVariable String userId, @RequestBody String comment){
         return postService.addComment(postId, userId, comment);
     }
 
-    @PatchMapping("{postId}/comment/{userId}")
+    @PatchMapping("/{postId}/editComment/{userId}")
     public PostEntity editComment(@PathVariable String postId, @PathVariable String userId, @RequestBody String comment){
         return postService.editComment(postId, userId, comment);
     }
 
-    @DeleteMapping("{postId}/comment/{userId}")
+    @DeleteMapping("/{postId}/deleteComment/{userId}")
     public PostEntity deleteComment(@PathVariable String postId, @PathVariable String userId){
         return postService.deleteComment(postId, userId);
     }

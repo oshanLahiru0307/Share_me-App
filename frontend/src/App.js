@@ -1,6 +1,7 @@
 import React from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from "./Components/Home";
+import UserProfile from "./Components/UserProfile";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/UserProfile" element={<UserProfile/>}/>
         </Routes>
       </Router>
     </div>

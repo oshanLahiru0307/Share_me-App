@@ -24,7 +24,6 @@ public class UserEntity {
     private String coverImg;
     private String profileImg;
     private List<String> friendsList;
-    private List<String> postsList;
 
     public String getId() {
         return id;
@@ -98,11 +97,4 @@ public class UserEntity {
         this.friendsList = friendsList;
     }
 
-    public List<String> getPostsList() {
-        return postsList;
-    }
-
-    public void setPostsList(List<String> postsList) {
-        this.postsList = postsList;
-    }
 }
