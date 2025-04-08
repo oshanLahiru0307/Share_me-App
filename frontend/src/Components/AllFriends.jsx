@@ -22,7 +22,6 @@ const AllFriends = () => {
                     width: '80px'
                 }}>+ follow</Button>
         </div>
-
     </div>
   )
 }
