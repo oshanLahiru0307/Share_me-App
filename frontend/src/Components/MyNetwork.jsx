@@ -12,13 +12,13 @@ const MyNetwork = () => {
             <div className='w-auto'>
                 <ProfileCard/>
             </div>
-            <div className='w-auto h-auto bg-white rounded-lg shadow-lg p-4'>
+            <div className='w-[1000px] h-auto bg-white rounded-lg shadow-lg p-4'>
                 <div>
                 <p className='text-blue-500 text-lg font-semibold '>My Friends</p>
                 <MyFriends/>
                 </div>
                 <div>
-                <p className='text-blue-500 text-lg font-semibold '>People you may know</p>
+                <p className='text-blue-500 text-lg font-semibold ' >People you may know</p>
                 <AllFriends/>
                 </div>
 
