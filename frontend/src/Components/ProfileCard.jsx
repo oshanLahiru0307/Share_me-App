@@ -11,7 +11,9 @@ const ProfileCard = () => {
                     height: '100px',
                     width: '100%',
                     borderRadius: '8px 8px 0 0',
-                    background: 'url("https://img.freepik.com/free-vector/blue-copy-space-digital-background_23-2148821698.jpg?t=st=1743746807~exp=1743750407~hmac=c9bda7d30e8857a1e16c9b5b06b689c3ce466c4586486a9707305e97471b9bb1&w=1380")'
+                    backgroundPosition:'center',
+                    backgroundSize:'cover',
+                    backgroundImage: 'url("https://t4.ftcdn.net/jpg/05/45/42/81/360_F_545428173_uyYWJoR9n5uJFYIWfDa2C49AzIECcU20.jpg")'
                 }}>
                 </div>
                 <Avatar style={{
