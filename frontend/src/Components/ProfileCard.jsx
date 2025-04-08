@@ -1,9 +1,14 @@
 import { Avatar } from 'antd'
 import { Link } from 'react-router-dom'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { GlobalOutlined, BookOutlined, TeamOutlined} from '@ant-design/icons'
 
 const ProfileCard = () => {
+    const navigate = useNavigate()
+    const handleAvatarClick = () => {
+        navigate('/userProfile')
+    }
     return (
         <div className='sticky top-24'>
             <div className='w-auto bg-white h-auto rounded-lg shadow-lg relative '>
@@ -16,8 +21,13 @@ const ProfileCard = () => {
                     backgroundImage: 'url("https://t4.ftcdn.net/jpg/05/45/42/81/360_F_545428173_uyYWJoR9n5uJFYIWfDa2C49AzIECcU20.jpg")'
                 }}>
                 </div>
-                <Avatar style={{
+                <Avatar 
+                onClick={
+                    ()=> {handleAvatarClick()}
+                }
+                style={{
                     border: '3px solid white',
+                    cursor: 'pointer',
                 }}
                     size={80} src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                     className='absolute top-12 left-6' />

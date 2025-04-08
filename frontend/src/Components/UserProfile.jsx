@@ -32,7 +32,7 @@ const UserProfile = () => {
         <h1 className='font-bold text-3xl mb-1'>John Doe</h1>
         <h1 className='font-normal mb-1'>Undergraduate Student at Metropholitent University</h1>
         <h1 className='font-normal mb-1'>San Francisco, CA</h1>
-        <Button className='absolute right-16 top-14 font-semibold'><EditFilled/>Edit Profile</Button>
+        <Button className='absolute right-16 top-14 font-semibold mr-1'><EditFilled/>Edit Profile</Button>
         </div>
       </div>
 

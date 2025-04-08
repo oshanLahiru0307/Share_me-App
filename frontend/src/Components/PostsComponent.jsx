@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link} from 'react-router-dom'
 import { HeartOutlined, EllipsisOutlined, CommentOutlined } from '@ant-design/icons'
 import { Avatar,Card } from 'antd'
 
