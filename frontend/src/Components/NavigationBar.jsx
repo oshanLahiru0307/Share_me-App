@@ -18,38 +18,38 @@ const NavigationBar = () => {
       <div>
         <ul className='flex items-center space-x-12'>
           <li>
-            <Link className='flex flex-col items-center gap-2 text-blue-950' to="">
+            <Link className='flex flex-col items-center gap-2 text-black' to="/">
               <HomeFilled />
               <p className='text-xs font-semibold'>Home</p>
             </Link>
           </li>
           <li>
-            <Link className='flex flex-col items-center gap-2' to="">
+            <Link className='flex flex-col items-center gap-2' to="/myNetwork">
             <UsergroupAddOutlined/>
             <p className='text-xs font-semibold'>My Network</p>
             </Link>
           </li>
           <li>
-            <Link className='flex flex-col items-center gap-2' to="">
+            <Link className='flex flex-col items-center gap-2' to="/events">
             <SlackOutlined/>
             <p className='text-xs font-semibold'>Events</p>
             </Link>
           </li>
           <li>
-            <Link className='flex flex-col items-center gap-2' to="">
+            <Link className='flex flex-col items-center gap-2' to="message">
             <MessageOutlined/>
             <p className='text-xs font-semibold'>Message</p>
             </Link>
           </li>
           <li>
 
-            <Link className='flex flex-col items-center gap-2' to="">
+            <Link className='flex flex-col items-center gap-2' to="/learning">
             <LaptopOutlined/>
             <p className='text-xs font-semibold'>Learning</p>
             </Link>
           </li>
           <li>
-            <Link className='flex flex-col items-center gap-2' to="">
+            <Link className='flex flex-col items-center gap-2' to="/notification">
             <BellOutlined/>
             <p className='text-xs font-semibold'>Notificaion</p>
             </Link>
