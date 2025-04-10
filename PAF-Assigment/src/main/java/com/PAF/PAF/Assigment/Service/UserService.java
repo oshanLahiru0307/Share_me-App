@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 @Transactional
@@ -35,8 +38,20 @@ public class UserService {
         return user.orElse(null);
     }
 
-    public UserEntity updateUser(UserEntity user) {
-        return userRepo.save(user);
+    public UserEntity updateUser(UserEntity updatedUser) {
+        UserEntity existingUser = userRepo.findById(updatedUser.getId()).orElse(null);
+        if(existingUser != null) {
+            if (updatedUser.getName() != null) existingUser.setName(updatedUser.getName());
+            if (updatedUser.getEmail() != null) existingUser.setEmail(updatedUser.getEmail());
+            if (updatedUser.getPassword() != null) existingUser.setPassword(updatedUser.getPassword()); // Consider password hashing
+            if (updatedUser.getOccupation() != null) existingUser.setOccupation(updatedUser.getOccupation());
+            if (updatedUser.getAddress() != null) existingUser.setAddress(updatedUser.getAddress());
+            if (updatedUser.getCoverImg() != null) existingUser.setCoverImg(updatedUser.getCoverImg());
+            if (updatedUser.getProfileImg() != null) existingUser.setProfileImg(updatedUser.getProfileImg());
+            if (updatedUser.getFriendsList() != null) existingUser.setFriendsList(updatedUser.getFriendsList());
+            return userRepo.save(updatedUser);
+        }
+        return null;
     }
 
     public UserEntity deleteUser(String id) {
@@ -91,5 +106,7 @@ public class UserService {
         }
         return currentUser;
     }
+
+
 
 }

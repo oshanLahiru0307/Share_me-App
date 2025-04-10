@@ -3,6 +3,7 @@ import NavigationBar from './NavigationBar'
 import MyFriends from './Myfriends'
 import AllFriends from './AllFriends'
 import ProfileCard from './ProfileCard'
+import { Divider } from 'antd'
 
 const MyNetwork = () => {
   return (
@@ -19,6 +20,7 @@ const MyNetwork = () => {
                 <MyFriends/>
                 <MyFriends/>
                 </div>
+                <Divider style={{borderColor:'#bbbbbb', height:'2px', margin:'50px 0 30px 0'}}></Divider>
                 <div>
                 <p className='text-blue-500 text-lg font-semibold ' >People you may know</p>
                 <AllFriends/>
