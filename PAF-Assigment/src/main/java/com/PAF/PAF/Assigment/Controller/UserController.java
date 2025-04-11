@@ -2,15 +2,23 @@ package com.PAF.PAF.Assigment.Controller;
 
 import com.PAF.PAF.Assigment.Entity.UserEntity;
 import com.PAF.PAF.Assigment.Service.UserService;
-import org.apache.catalina.User;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,7 +84,7 @@ public class UserController {
         Path filePathWithName = filePath.resolve(fileName);
         Files.copy(Imagefile.getInputStream(), filePathWithName);
 
-        String url = "/"+UPLOAD_DIRECTORY+"/"+fileName;
+        String url = UPLOAD_DIRECTORY+"/"+fileName;
 
         return url;
     }
@@ -103,6 +111,34 @@ public class UserController {
         return null;
     }
 
+    @GetMapping("uploads/users/{filename}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get(UPLOAD_DIRECTORY).resolve(filename);
+            UrlResource resource = new UrlResource(filePath.toUri());
 
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body((Resource) resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MalformedURLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
 
+    }
+
+    @GetMapping("/nonFriends/{userId}")
+    public ResponseEntity<List<UserEntity>> getNonFriends(@PathVariable String userId) {
+        UserEntity currentUser = userService.getUserById(userId);
+        if (currentUser != null) {
+            List<String> friendIds = currentUser.getFriendsList();
+            List<UserEntity> nonFriends = userService.getNonFriends(userId,friendIds != null ? friendIds : List.of());
+            return ResponseEntity.ok(nonFriends);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

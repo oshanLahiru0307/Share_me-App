@@ -2,9 +2,31 @@ import React from 'react'
 import { Link} from 'react-router-dom'
 import { HeartOutlined, EllipsisOutlined, CommentOutlined } from '@ant-design/icons'
 import { Avatar,Card } from 'antd'
-
+import { useSnapshot } from 'valtio'
+import { useState, useEffect } from 'react'
+import userState from '../State/UserState'
+import UserService from '../ServiceController/UserServices'
 
 const PostsComponent = () => {
+
+    const snap = useSnapshot(userState)
+    const userId = snap.userId
+    const [user, setUser] = useState({})
+
+    const fetchUserProfile = async () => {
+        try{
+            const response = await UserService.getUserById(userId)
+            console.log('User Profile:', response)
+            setUser(response)
+        }catch(error){
+            console.error('Error fetching user profile:', error)
+        }
+    }
+
+    useEffect(()=>{
+        fetchUserProfile()
+    }, [userId])
+
     return (
         <div>
             <Card
@@ -19,11 +41,11 @@ const PostsComponent = () => {
                     <div>
                         <div className='flex flex-row justify-between items-center'>
                         <div className='flex flex-row gap-2 items-center'>
-                            <Avatar size={48} src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                            <Avatar size={48} src={`http://localhost:4000/api/v1/${user.profileImg}`}
                             />
                             <div>
-                                <p className='my-0 mx-0 '>John Doe</p>
-                                <p className='my-0 mx-0 font-normal text-xs'>Undergraduate Student at Metropholitent University</p>
+                                <p className='my-0 mx-0 '>{user.name}</p>
+                                <p className='my-0 mx-0 font-normal text-xs'>{user.occupation}</p>
                             </div>
                         </div>
                         <Link to="/"><EllipsisOutlined /></Link>

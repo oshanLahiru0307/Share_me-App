@@ -3,10 +3,34 @@ import { Avatar, Input} from 'antd'
 import { Link } from 'react-router-dom'
 import logo from '../assets/airbnb_1724634.png'
 import { HomeFilled, UsergroupAddOutlined, MessageOutlined, BellOutlined, SlackOutlined, LaptopOutlined} from '@ant-design/icons'
+import {useSnapshot} from 'valtio'
+import userState from '../State/UserState'
+import { useState, useEffect } from 'react'
+import UserService from '../ServiceController/UserServices'
 
 const { Search } = Input
 
 const NavigationBar = () => {
+
+  const snap = useSnapshot(userState)
+  const userId = snap.userId
+  const [user, setUser] = useState({})
+
+
+  const fetchUserProfile = async () => {
+    try{
+      const response = await UserService.getUserById(userId)
+      setUser(response)
+    }catch(error){
+      console.error('Error fetching user profile:', error)
+    }
+  }
+
+  useEffect(()=> {
+    fetchUserProfile()
+  }, [userId])
+
+
   return (
     <div className='sticky top-0 z-10'>
       <div className='w-full flex justify-between items-center bg-gradient-to-r from-blue-50 to-blue-500  shadow-lg px-16 py-3 sticky'>
@@ -57,7 +81,7 @@ const NavigationBar = () => {
         </ul>
       </div>
       <div>
-        <Avatar size={38} src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+        <Avatar size={38} src={`http://localhost:4000/api/v1/${user.profileImg}`} />
       </div>
 
     </div>

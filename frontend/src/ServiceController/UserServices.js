@@ -95,6 +95,16 @@ class UserServices {
         }
     }
 
+    static async getNonFriends(userId){
+        try{
+            const response = await axios.get(`${API_URL}/nonFriends/${userId}`);
+            return response.data;
+        }catch(error){
+            console.error("Error fetching non-friends:", error);
+            throw error;       
+        }
+    }
+
 }
 
 export default UserServices;

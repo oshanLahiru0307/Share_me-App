@@ -17,8 +17,6 @@ const MyNetwork = () => {
                 <div>
                 <p className='text-blue-500 text-lg font-semibold '>My Friends</p>
                 <MyFriends/>
-                <MyFriends/>
-                <MyFriends/>
                 </div>
                 <Divider style={{borderColor:'#bbbbbb', height:'2px', margin:'50px 0 30px 0'}}></Divider>
                 <div>

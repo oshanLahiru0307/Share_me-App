@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <div className='bg-slate-200 h-auto '>
       <NavBar />
-      <div className='mt-10 mx-10 flex flex-row gap-10'>
+      <div className='mt-10 mx-6 flex flex-row gap-10'>
         <div>
           <ProfileCard />
         </div>
@@ -25,18 +25,6 @@ const Home = () => {
           <div className="w-auto h-[350px] bg-white rounded-lg shadow-lg p-4 sticky top-24 ">
             <p className="text-blue-500 text-lg font-semibold pb-2">Add to your feed</p>
             <div className='h-[250px] sticky top-5 overflow-y-auto pb-4 px-4'>
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
               <UserList />
             </div>
           </div>

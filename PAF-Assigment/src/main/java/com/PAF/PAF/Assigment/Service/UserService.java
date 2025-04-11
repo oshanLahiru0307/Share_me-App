@@ -107,6 +107,12 @@ public class UserService {
         return currentUser;
     }
 
+    //public List<UserEntity> getNonFriends(String currentUserId, List<String> friendIds) {
+    //    return userRepo.findByIdNotInAndIdNot(friendIds, currentUserId);
+    //}
 
+    public List<UserEntity> getNonFriends(String currentUserId, List<String> friendIds) {
+        return userRepo.findNonFriends(friendIds, currentUserId);
+    }
 
 }
