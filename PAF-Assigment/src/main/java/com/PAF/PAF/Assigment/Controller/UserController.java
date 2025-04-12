@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value="/api/v1")
+@RequestMapping(value="/api/v1/user")
 @CrossOrigin
 public class UserController {
 

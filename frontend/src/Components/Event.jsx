@@ -36,6 +36,7 @@ const Event = () => {
                 <p className=''>Place</p>
                 <p className=''>Organization</p>
                 </div>
+                <div className='mb-4 flex justify-center items-center'><Button type='primary' className='w-28'>View</Button></div>
               </div>
               <div className='w-[250px] h-auto bg-white rounded-lg shadow-lg hover:shadow-md transition-shadow duration-300 ease-in-out'>
                 <div style={{
@@ -53,6 +54,7 @@ const Event = () => {
                 <p className=''>Place</p>
                 <p className=''>Organization</p>
                 </div>
+                <div className='mb-4 flex justify-center items-center'><Button type='primary' className='w-28'>View</Button></div>
               </div>
             </div>
           </div>
@@ -78,6 +80,7 @@ const Event = () => {
                 <p className=''>Place</p>
                 <p className=''>Organization</p>
                 </div>
+                <div className='mb-4 flex justify-center items-center'><Button type='primary' className='w-28'>View</Button></div>
               </div>
               <div className='w-[250px] h-auto bg-white rounded-lg shadow-lg hover:shadow-md transition-shadow duration-300 ease-in-out'>
                 <div style={{
@@ -95,6 +98,7 @@ const Event = () => {
                 <p className=''>Place</p>
                 <p className=''>Organization</p>
                 </div>
+                <div className='mb-4 flex justify-center items-center'><Button type='primary' className='w-28'>View</Button></div>
               </div>
             </div>
           </div>
