@@ -5,6 +5,7 @@ import { Button, Divider, Modal, Form, Input, DatePicker, TimePicker } from 'ant
 import { useSnapshot } from 'valtio';
 import userState from '../State/UserState';
 import { useState, useEffect } from 'react';
+import UserServices from '../ServiceController/UserServices';
 import EventService from '../ServiceController/EventService';
 import dayjs from 'dayjs';
 
@@ -21,7 +22,7 @@ const Event = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await EventService.getUserById(userId);
+      const response = await UserServices.getUserById(userId);
       console.log('User Profile:', response);
       setUser(response);
       setUserName(response.name) // Update userName from the fetched user data
