@@ -23,6 +23,10 @@ public class EventServices {
         return eventRepo.findById(String.valueOf(id)).orElse(null);
     }
 
+    public List<EventEntity> getEventByUserId(String userId){
+        return eventRepo.findAllByUserId(userId);
+    }
+
     public EventEntity createEvent(EventEntity event){
         return eventRepo.save(event);
     }
@@ -55,4 +59,7 @@ public class EventServices {
         return null;
     }
 
+    public List<EventEntity> getAllEventsExcludingSelf(String userId) {
+        return eventRepo.findAllEventsNotCreatedBy(userId);
+    }
 }

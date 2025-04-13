@@ -71,18 +71,6 @@ const UserProfile = () => {
             <p className="text-blue-500 text-lg font-semibold pb-2">Add to your feed</p>
             <div className='h-[550px] sticky top-5 overflow-y-auto pb-4 px-4'>
               <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
-              <UserList />
             </div>
           </div>
           <div className='sticky top-[100px]'>
