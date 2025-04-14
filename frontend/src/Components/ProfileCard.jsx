@@ -32,7 +32,7 @@ const ProfileCard = () => {
 
 
     const handleAvatarClick = () => {
-        navigate('/userProfile')
+        navigate('/userProfile/'+userId)
     }
 
     return (
@@ -61,7 +61,7 @@ const ProfileCard = () => {
                 <div className='flex flex-col items-start mt-8 ml-4'>
                     <h1 className='text-xl font-semibold my-1'>{user.name}</h1>
                     <p className='text-sm text-black my-1 mr-4'>{user.occupation}</p>
-                    <p className='text-sm text-black my-1'>@johndoe</p>
+                <p className='text-sm text-black my-1'>{user.email}</p>
                     <p className='text-sm text-black mb-4'>{user.address}</p>
                 </div>
             </div>

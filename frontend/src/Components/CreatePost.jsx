@@ -46,7 +46,7 @@ const CreatePost = () => {
                     className='' />
                 <Button style={{
                     width: '550px'
-                }}>Create New Post</Button>
+                }}>+ Create New Post</Button>
             </div>
         </div>
     )

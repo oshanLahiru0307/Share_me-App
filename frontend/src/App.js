@@ -12,7 +12,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/userProfile" element={<UserProfile/>}/>
+          <Route path="/userProfile/:id" element={<UserProfile/>}/>
           <Route path="/myNetwork" element={<MyNetwork/>}/>
           <Route path="/events" element={<Event/>}/>
         </Routes>

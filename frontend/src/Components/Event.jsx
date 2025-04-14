@@ -16,7 +16,8 @@ const Event = () => {
   const userId = snap.userId;
   const [user, setUser] = useState({});
   const [userName, setUserName] = useState('');
-  const [events, setEvents] = useState([]); // State to hold the fetched events
+  const [events, setEvents] = useState([]);
+  const [othersEvents, setOthersEvent] = useState([]) // State to hold the fetched events
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
@@ -33,6 +34,16 @@ const Event = () => {
     }
   };
 
+  const fetchOthersEvents = async () => {
+    try {
+      const response = await EventService.getOtherEvents(userId);
+      setOthersEvent(response);
+      console.log('Fetched Events:', response);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  }
+
   const fetchEvents = async () => {
     try {
       // Assuming you have a function in EventService to fetch events by user ID
@@ -46,7 +57,8 @@ const Event = () => {
 
   useEffect(() => {
     fetchUserProfile();
-    fetchEvents(); // Fetch events when the component mounts
+    fetchEvents();
+    fetchOthersEvents() // Fetch events when the component mounts
   }, [userId]);
 
   const showModal = () => {
@@ -223,6 +235,7 @@ const Event = () => {
             <p className='text-blue-500 text-lg font-semibold '>Recommended for you</p>
             <div className='w-full h-auto flex flex-row gap-8 items-center justify-start my-5'>
               {/* You'll need to fetch and map through recommended events here */}
+              {othersEvents.map((event) => (
               <div className='w-[250px] h-auto bg-white rounded-lg shadow-lg hover:shadow-md transition-shadow duration-300 ease-in-out'>
                 <div
                   style={{
@@ -232,45 +245,22 @@ const Event = () => {
                     backgroundPosition: 'center',
                     borderRadius: '8px 8px 0 0',
                     backgroundImage:
-                      'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtUZz3LObEXEWZq5dd9KH-wqaR_qW_j7L2Bg&s")',
+                      `url("http://localhost:4000/api/v1/${event.imgUrl}")`,
                   }}
                 ></div>
-                <div className='p-4'>
-                  <p className='text-md font-medium mb-2'>Your Events</p>
-                  <p className=''>Date & time</p>
-                  <p className=''>Place</p>
-                  <p className=''>Organization</p>
-                </div>
+                  <div className='p-4'>
+                    <p className='text-md font-medium mb-2'>{event.topic}</p>
+                    <p className=''>{dayjs(event.date).format('YYYY-MM-DD')} {event.time}</p>
+                    <p className=''>{event.location}</p>
+                    <p className=''>{event.organization}</p>
+                  </div>
                 <div className='mb-4 flex justify-center items-center'>
                   <Button type='primary' className='w-28'>
                     View
                   </Button>
                 </div>
               </div>
-              <div className='w-[250px] h-auto bg-white rounded-lg shadow-lg hover:shadow-md transition-shadow duration-300 ease-in-out'>
-                <div
-                  style={{
-                    width: '100%',
-                    height: '150px',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    borderRadius: '8px 8px 0 0',
-                    backgroundImage:
-                      'url("https://thewaltdisneycompany.com/app/uploads/2025/01/Rita-Ferro-%E2%80%93-Disney-Global-Tech-Data-Showcase-2025-1024x700.jpg")',
-                  }}
-                ></div>
-                <div className='p-4'>
-                  <p className='text-md font-medium mb-2'>Your Events</p>
-                  <p className=''>Date & time</p>
-                  <p className=''>Place</p>
-                  <p className=''>Organization</p>
-                </div>
-                <div className='mb-4 flex justify-center items-center'>
-                  <Button type='primary' className='w-28'>
-                    View
-                  </Button>
-                </div>
-              </div>
+               ))}
             </div>
           </div>
         </div>
