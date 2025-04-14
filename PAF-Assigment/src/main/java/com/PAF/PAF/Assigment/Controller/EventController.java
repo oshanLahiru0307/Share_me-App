@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -82,8 +83,70 @@ public class EventController {
     }
 
     @PatchMapping("/updateEvent")
-    public EventEntity updateEvent(@RequestBody EventEntity eventEntity) {
-        return eventServices.updateEvent(eventEntity);
+    public ResponseEntity<EventEntity> updateEvent(@RequestParam("eventId") String eventId, // Match the 'id' expected by findById
+                                                   @RequestParam(value = "topic", required = false) String topic,
+                                                   @RequestParam(value = "organization", required = false) String organization,
+                                                   @RequestParam(value = "date", required = false) String date,
+                                                   @RequestParam(value = "time", required = false) String time,
+                                                   @RequestParam(value = "location", required = false) String location,
+                                                   @RequestParam(value = "description", required = false) String description,
+                                                   @RequestParam(value = "speaker", required = false) String speaker,
+                                                   @RequestParam(value = "image", required = false) MultipartFile image,
+                                                   @RequestParam(value = "link", required = false) String link,
+                                                   @RequestParam(value = "userId", required = false) String userId,
+                                                   @RequestParam(value = "userName", required = false) String userName) throws IOException {
+
+        Optional<EventEntity> existingEventOptional = Optional.ofNullable(eventServices.getEventById(eventId));
+
+        if (existingEventOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        EventEntity updatedEvent = new EventEntity();
+        updatedEvent.setId(eventId); // Set the ID for the update operation
+
+        if (userId != null) {
+            updatedEvent.setUserId(userId);
+        }
+        if (userName != null) {
+            updatedEvent.setUserName(userName);
+        }
+        if (topic != null) {
+            updatedEvent.setTopic(topic);
+        }
+        if (organization != null) {
+            updatedEvent.setOrganization(organization);
+        }
+        if (date != null) {
+            updatedEvent.setDate(date);
+        }
+        if (time != null) {
+            updatedEvent.setTime(time);
+        }
+        if (location != null) {
+            updatedEvent.setLocation(location);
+        }
+        if (link != null) {
+            updatedEvent.setLink(link);
+        }
+        if (description != null) {
+            updatedEvent.setDescription(description);
+        }
+        if (speaker != null) {
+            updatedEvent.setSpeaker(speaker);
+        }
+        if (image != null && !image.isEmpty()) {
+            String imgUrl = saveAndGetImageUrl(image);
+            updatedEvent.setImgUrl(imgUrl);
+        }
+
+        EventEntity result = eventServices.updateEvent(updatedEvent);
+
+        if (result != null) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Should ideally not happen if getById worked
+        }
     }
 
     @DeleteMapping("/deleteEvent/{id}")

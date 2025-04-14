@@ -1,7 +1,8 @@
 import React from 'react';
 import NavigationBar from './NavigationBar';
 import ProfileCard from './ProfileCard';
-import { Button, Divider, Modal, Form, Input, DatePicker, TimePicker } from 'antd';
+import { Button, Divider, Modal, Form, Input, DatePicker, TimePicker, Menu, Dropdown, message } from 'antd';
+import { UnorderedListOutlined } from '@ant-design/icons';
 import { useSnapshot } from 'valtio';
 import userState from '../State/UserState';
 import { useState, useEffect } from 'react';
@@ -12,27 +13,40 @@ import dayjs from 'dayjs';
 const Event = () => {
   const [form] = Form.useForm();
   const snap = useSnapshot(userState);
-  const userId = snap.userId; // Assuming userName is also available in userState
+  const userId = snap.userId;
   const [user, setUser] = useState({});
-  const [userName, setUserName] = useState(''); // Initialize userName state
-  const [events, setEvents] = useState([]);
+  const [userName, setUserName] = useState('');
+  const [events, setEvents] = useState([]); // State to hold the fetched events
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
   const [file, setFile] = useState(null);
 
   const fetchUserProfile = async () => {
     try {
       const response = await UserServices.getUserById(userId);
-      console.log('User Profile:', response);
       setUser(response);
-      setUserName(response.name) // Update userName from the fetched user data
+      setUserName(response.name);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
-  }
+  };
 
-  useEffect(()=> {
+  const fetchEvents = async () => {
+    try {
+      // Assuming you have a function in EventService to fetch events by user ID
+      const response = await EventService.getEventByUserId(userId);
+      setEvents(response);
+      console.log('Fetched Events:', response);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchUserProfile();
+    fetchEvents(); // Fetch events when the component mounts
   }, [userId]);
 
   const showModal = () => {
@@ -52,35 +66,100 @@ const Event = () => {
   };
 
   const onFinish = async (values) => {
-    try {
-      const formData = new FormData();
-      formData.append('topic', values.topic);
-      formData.append('organization', values.organization);
-      formData.append('date', dayjs(values.date).format('YYYY-MM-DD'));
-      formData.append('time', dayjs(values.time).format('HH:mm:ss'));
-      formData.append('location', values.location);
-      formData.append('description', values.description);
-      formData.append('speaker', values.speaker);
-      if (file) {
-        formData.append('image', file);
-      }
-      if (values.link) {
-        formData.append('link', values.link);
-      }
-      formData.append('userId', userId);
-      formData.append('userName', userName);
 
-      const newEvent = await EventService.createEvent(formData);
-      console.log('Event created:', newEvent);
-      setModalVisible(false);
-      form.resetFields();
-      setFile(null);
-      // Optionally, you can refetch the events list here to update the UI
-    } catch (error) {
-      console.error('Error creating event:', error);
-      // Handle error feedback to the user
+      try {
+        const formData = new FormData();
+        formData.append('topic', values.topic);
+        formData.append('organization', values.organization);
+        formData.append('date', dayjs(values.date).format('YYYY-MM-DD'));
+        formData.append('time', dayjs(values.time).format('HH:mm:ss'));
+        formData.append('location', values.location);
+        formData.append('description', values.description);
+        formData.append('speaker', values.speaker);
+        if (file) {
+          formData.append('image', file);
+        }
+        if (values.link) {
+          formData.append('link', values.link);
+        }
+        formData.append('userId', userId);
+        formData.append('userName', userName);
+        formData.append('eventId', selectedEvent ? selectedEvent.id : null); // Include event ID if editing
+  
+        if(!selectedEvent){
+        const newEvent = await EventService.createEvent(formData);
+        console.log('Event created:', newEvent);
+        setModalVisible(false);
+        form.resetFields();
+        setFile(null);
+        fetchEvents(); // Refetch events after creating a new one
+        }else{
+          const newEvent = await EventService.updateEvent(formData);
+          console.log('Event created:', newEvent);
+          setModalVisible(false);
+          form.resetFields();
+          setFile(null);
+          fetchEvents();
+        }
+      } catch (error) {
+        console.error('Error creating event:', error);
+        message.error('Failed to create event');
+      }
+    
+    
+  };
+
+  const showDeleteConfirm = (event) => {
+    setEventToDelete(event);
+    setConfirmDeleteVisible(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (eventToDelete && eventToDelete.id) {
+      try {
+        await EventService.deleteEvent(eventToDelete.id); // Assuming your backend expects an 'id' to delete
+        message.success('Event deleted successfully');
+        fetchEvents(); // Refetch events after deletion
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        message.error('Failed to delete event');
+      } finally {
+        setConfirmDeleteVisible(false);
+        setEventToDelete(null);
+      }
     }
   };
+
+  const handleCancelDelete = () => {
+    setConfirmDeleteVisible(false);
+    setEventToDelete(null);
+  };
+
+  const handleEditEvent = (event) => {
+    setSelectedEvent(event);
+    form.setFieldsValue({
+      topic: event.topic,
+      organization: event.organization,
+      date: dayjs(event.date),
+      time: dayjs(event.time, 'HH:mm:ss'),
+      location: event.location,
+      description: event.description,
+      speaker: event.speaker,
+      link: event.link,
+    });
+    setModalVisible(true);
+  };
+
+  const eventMenu = (event) => (
+    <Menu>
+      <Menu.Item key='edit' onClick={() => handleEditEvent(event)}>
+        Edit
+      </Menu.Item>
+      <Menu.Item key='delete' onClick={() => showDeleteConfirm(event)}>
+        Delete
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <div className='bg-slate-200 h-auto pb-5'>
@@ -100,54 +179,39 @@ const Event = () => {
           <div>
             <p className='text-blue-500 text-lg font-semibold '>Your Events</p>
             <div className='w-full h-auto flex flex-row gap-8 items-center justify-start my-5'>
-              <div className='w-[250px] h-auto bg-white rounded-lg shadow-lg hover:shadow-md transition-shadow duration-300 ease-in-out'>
+              {events.map((event) => (
                 <div
-                  style={{
-                    width: '100%',
-                    height: '150px',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    borderRadius: '8px 8px 0 0',
-                    backgroundImage:
-                      'url("https://www.echelonedge.com/wp-content/uploads/2023/06/National-Technology-Week-feature.png")',
-                  }}
-                ></div>
-                <div className='p-4'>
-                  <p className='text-md font-medium mb-2'>Your Events</p>
-                  <p className=''>Date & time</p>
-                  <p className=''>Place</p>
-                  <p className=''>Organization</p>
+                  key={event.id} // Assuming each event has a unique 'id'
+                  className='w-[250px] h-auto bg-white rounded-lg shadow-lg hover:shadow-md transition-shadow duration-300 ease-in-out'
+                >
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '150px',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      borderRadius: '8px 8px 0 0',
+                      backgroundImage: event.imgUrl ? `url("http://localhost:4000/api/v1/${event.imgUrl}")` : 'url("https://via.placeholder.com/150")', // Use actual image URL
+                    }}
+                  >
+                    <Dropdown overlay={eventMenu(event)} trigger={['click']} placement='bottomRight'>
+                      <UnorderedListOutlined className='float-right font-bold text-white text-xl m-3 cursor-pointer' />
+                    </Dropdown>
+                  </div>
+                  <div className='p-4'>
+                    <p className='text-md font-medium mb-2'>{event.topic}</p>
+                    <p className=''>{dayjs(event.date).format('YYYY-MM-DD')} {event.time}</p>
+                    <p className=''>{event.location}</p>
+                    <p className=''>{event.organization}</p>
+                  </div>
+                  <div className='mb-4 flex justify-center items-center'>
+                    <Button type='primary' className='w-28'>
+                      View
+                    </Button>
+                  </div>
                 </div>
-                <div className='mb-4 flex justify-center items-center'>
-                  <Button type='primary' className='w-28'>
-                    View
-                  </Button>
-                </div>
-              </div>
-              <div className='w-[250px] h-auto bg-white rounded-lg shadow-lg hover:shadow-md transition-shadow duration-300 ease-in-out'>
-                <div
-                  style={{
-                    width: '100%',
-                    height: '150px',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    borderRadius: '8px 8px 0 0',
-                    backgroundImage:
-                      'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvb-1h2ar_TvnchzdepiLTyWyoKf8Zt1EuvA&s")',
-                  }}
-                ></div>
-                <div className='p-4'>
-                  <p className='text-md font-medium mb-2'>Your Events</p>
-                  <p className=''>Date & time</p>
-                  <p className=''>Place</p>
-                  <p className=''>Organization</p>
-                </div>
-                <div className='mb-4 flex justify-center items-center'>
-                  <Button type='primary' className='w-28'>
-                    View
-                  </Button>
-                </div>
-              </div>
+              ))}
+              {events.length === 0 && <p>No events created yet.</p>}
             </div>
           </div>
 
@@ -156,8 +220,9 @@ const Event = () => {
           ></Divider>
 
           <div>
-            <p className='text-blue-500 text-lg font-semibold '>Recomonded for you</p>
+            <p className='text-blue-500 text-lg font-semibold '>Recommended for you</p>
             <div className='w-full h-auto flex flex-row gap-8 items-center justify-start my-5'>
+              {/* You'll need to fetch and map through recommended events here */}
               <div className='w-[250px] h-auto bg-white rounded-lg shadow-lg hover:shadow-md transition-shadow duration-300 ease-in-out'>
                 <div
                   style={{
@@ -218,6 +283,7 @@ const Event = () => {
         footer={null}
       >
         <Form form={form} layout='vertical' onFinish={onFinish}>
+          {/* ... your form fields ... */}
           <Form.Item
             name='topic'
             label='Topic'
@@ -275,10 +341,19 @@ const Event = () => {
           </Form.Item>
           <Form.Item>
             <Button type='primary' htmlType='submit'>
-              Create Event
+              {(selectedEvent ? 'Update' : 'Create') } Event
             </Button>
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        title='Confirm Delete'
+        visible={confirmDeleteVisible}
+        onOk={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      >
+        <p>Are you sure you want to delete this event?</p>
       </Modal>
     </div>
   );
