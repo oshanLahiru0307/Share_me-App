@@ -71,24 +71,16 @@ class PostController {
             throw error
         }
     }
-    static async likePost(postId) {
+    static async likePost(postId, userId) {
         try {
-            const response = await axios.post(`${BASE_URL}/likePost/${postId}`)
+            const response = await axios.post(`${BASE_URL}/${postId}/userLike/${userId}`)
             return response.data
         } catch (error) {
             console.error('Error liking post:', error)
             throw error
         }
     }
-    static async unlikePost(postId) {
-        try {
-            const response = await axios.post(`${BASE_URL}/unlikePost/${postId}`)
-            return response.data
-        } catch (error) {
-            console.error('Error unliking post:', error)
-            throw error
-        }
-    }
+
     static async commentPost(postId, commentData) {
         try {
             const response = await axios.post(`${BASE_URL}/commentPost/${postId}`, commentData)

@@ -14,6 +14,10 @@ const Home = () => {
 
   const [posts, setPosts] = useState([])
 
+  const handlePostUpdated = () => {
+    fetchPosts();
+  };
+
   const fetchPosts = async () => {
     try {
       const response = await PostController.getAllPosts()
@@ -38,7 +42,7 @@ const Home = () => {
         <div className='display block'>
           <CreatePost />
           {posts.map((post) => (
-            <PostsComponent key={post._id} post={post} />
+            <PostsComponent key={post._id} post={post} onPostUpdated={handlePostUpdated} />
           ))}
         </div>
         <div>

@@ -108,6 +108,15 @@ public class PostController {
         return postService.deleteComment(postId, userId);
     }
 
+    @DeleteMapping("/deletePost/{postId}")
+    public PostEntity deletePost(@PathVariable String postId){
+        PostEntity post = postService.getPost(postId);
+        if (post != null && post.getImageUrls() != null) {
+            deleteImages(post.getImageUrls());
+        }
+        return postService.deletePost(postId);
+    }
+
     @GetMapping("uploads/postImages/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {
