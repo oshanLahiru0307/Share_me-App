@@ -62,6 +62,7 @@ public class PostController {
         post.setComments(null);
         return postService.createPost(post);
     }
+
     @PostMapping("{postId}/userLike/{userId}")
     public PostEntity userLike(@PathVariable String postId, @PathVariable String userId){
         return postService.likeOrDislikePost(postId, userId);
@@ -72,9 +73,34 @@ public class PostController {
         return postService.addComment(postId, userId, comment);
     }
 
-    @PatchMapping("/{postId}/editComment/{userId}")
-    public PostEntity editComment(@PathVariable String postId, @PathVariable String userId, @RequestBody String comment){
-        return postService.editComment(postId, userId, comment);
+    @PatchMapping("/updatePost")
+    public ResponseEntity<PostEntity> updatePost(@RequestParam(value = "postId") String postId,
+                                                 @RequestParam(value = "caption", required = false) String caption,
+                                                 @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles) {
+        PostEntity existingPost = postService.getPost(postId);
+        if (existingPost == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (caption != null) {
+            existingPost.setCaption(caption);
+        }
+
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            try {
+                // Delete old images if you want to replace them
+                if (existingPost.getImageUrls() != null && !existingPost.getImageUrls().isEmpty()) {
+                    deleteImages(existingPost.getImageUrls());
+                }
+                List<String> newImageUrls = saveAndGetImageUrls(imageFiles);
+                existingPost.setImageUrls(newImageUrls);
+            } catch (IOException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        PostEntity updatedPost = postService.updatePost(existingPost);
+        return new ResponseEntity<>(updatedPost, HttpStatus.OK);
     }
 
     @DeleteMapping("/{postId}/deleteComment/{userId}")
@@ -91,7 +117,7 @@ public class PostController {
             if (resource.exists()) {
                 return ResponseEntity.ok()
                         .contentType(MediaType.IMAGE_JPEG)
-                        .body((Resource) resource);
+                        .body(resource);
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -119,6 +145,17 @@ public class PostController {
         }
 
         return urls;
+    }
+
+    public void deleteImages(List<String> imageUrls) {
+        for (String imageUrl : imageUrls) {
+            try {
+                Path filePath = Paths.get(imageUrl);
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                System.err.println("Error deleting image: " + imageUrl + " - " + e.getMessage());
+            }
+        }
     }
 
 }

@@ -15,7 +15,7 @@ class PostController {
 
     static async getPostById(postId) {
         try {
-            const response = await axios.get(`${BASE_URL}/getPostById/${postId}`)
+            const response = await axios.get(`${BASE_URL}/getPost/${postId}`)
             return response.data
         } catch (error) {
             console.error('Error fetching post:', error)
@@ -49,6 +49,7 @@ class PostController {
 
     static async updatePost(postData) {
         try {
+            console.log({'Post data:': postData})
             const response = await axios.patch(`${BASE_URL}/updatePost`, postData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',

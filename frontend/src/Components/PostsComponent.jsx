@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { HeartOutlined, EllipsisOutlined, CommentOutlined } from '@ant-design/icons';
-import { Avatar, Card, Carousel, Modal } from 'antd';
-import UserService from '../ServiceController/UserServices';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { HeartOutlined, EllipsisOutlined, CommentOutlined} from '@ant-design/icons';
+import { Avatar, Carousel, Modal, Divider } from 'antd';
+import UserService from '../ServiceController/UserServices'; // Assuming you have PostService
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
-const PostsComponent = ({ post}) => {
+const PostsComponent = ({ post, onDelete }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
     const [modalVisible, setModalVisible] = useState(false);
@@ -16,107 +15,81 @@ const PostsComponent = ({ post}) => {
     const fetchUserProfile = async () => {
         try {
             const response = await UserService.getUserById(userId);
-            console.log('User Profile:', response);
             setUser(response);
         } catch (error) {
             console.error('Error fetching user profile:', error);
         }
     };
 
-    useState(() => {
+    useEffect(() => {
         fetchUserProfile();
     }, [userId]);
+
 
     const showImageModal = (index) => {
         setCurrentImageIndex(index);
         setModalVisible(true);
     };
 
-    const handleCancel = () => {
+    const handleCancelModal = () => {
         setModalVisible(false);
     };
+
+
     return (
-        <div>
-            <Card
-                style={{
-                    width: 'inherit',
-                    marginTop: '20px',
-                    marginBottom: '20px',
-                    boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-                    paddingTop: '10px',
-                }}
-                title={
+        <div className=" w-[660px] mt-5 mb-5 rounded-lg shadow-md bg-white p-4">
+            <div className="flex justify-between items-center pb-3">
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(`/userProfile/${userId}`)}>
+                    <Avatar size={48} src={`http://localhost:4000/api/v1/${user.profileImg}`} />
                     <div>
-                        <div className='flex flex-row justify-between items-center'>
-                            <div className='flex flex-row gap-2 items-center'>
-                                <Avatar onClick={()=>{
-                                    navigate('/userProfile/'+userId)
-                                }} size={48} src={`http://localhost:4000/api/v1/${user.profileImg}`} />
-                                <div>
-                                    <p className='my-0 mx-0 '>{user.name}</p>
-                                    <p className='my-0 mx-0 font-normal text-xs'>{user.occupation}</p>
-                                </div>
-                            </div>
-                            <Link to="/">
-                                <EllipsisOutlined />
-                            </Link>
-                        </div>
-                        <div className='py-4'>
-                            <p className='text-sm font-normal  text-slate-900'>{post.caption}</p>
-                        </div>
+                        <p className="my-0 mx-0 font-semibold">{user.name}</p>
+                        <p className="my-0 mx-0 text-xs text-gray-500">{user.occupation}</p>
                     </div>
-                }
-                actions={[
-                    <HeartOutlined className='float-left ml-2 h-5 w-5' key="like" />,
-                    <CommentOutlined className='float-right mr-2' key="comment" />,
-                ]}
-            >
-                {post.imageUrls && post.imageUrls.length > 0 && (
-                    <div className='w-[600px]'>
-                        {post.imageUrls.length === 1 ? (
-                            <img
-                                style={{
-                                    width: '100%',
-                                    height: 'auto',
-                                    objectFit: 'cover', /* Try cover to fill space */
-                                    cursor: 'pointer',
-                                }}
-                                alt="post"
-                                src={`http://localhost:4000/api/v1/${post.imageUrls[0]}`}
-                                onClick={() => showImageModal(0)}
-                            />
-                        ) : (
-                            <ResponsiveMasonry
-                                columnsCountBreakPoints={{ 350: 1, 750: 2, 1200: 2 }}
-                                gutterBreakpoints={{ 350: "12px", 750: "16px", 1200: "24px" }} >
-                                <Masonry
-                                >
-                                    {post.imageUrls.map((imageUrl, index) => (
-                                        <div key={index}>
-                                            <img
-                                                style={{
-                                                    width: '100%',
-                                                    height: 'auto',
-                                                    display: 'block',
-                                                    cursor: 'pointer',
-                                                    marginBottom: '8px',
-                                                    objectFit: 'cover', /* Try cover to fill space */
-                                                }}
-                                                alt={`post-${index}`}
-                                                src={`http://localhost:4000/api/v1/${imageUrl}`}
-                                                onClick={() => showImageModal(index)}
-                                            />
-                                        </div>
-                                    ))}
-                                </Masonry>
-                            </ResponsiveMasonry>
-                        )}
-                    </div>
-                )}
-            </Card>
+                </div>
+                    <EllipsisOutlined className="text-2xl cursor-pointer" />
+            </div>
+            <div className="pb-4">
+                <p className="text-sm font-normal text-slate-900">{post.caption}</p>
+            </div>
+            {post.imageUrls && post.imageUrls.length > 0 && (
+                <div className="w-full">
+                    {post.imageUrls.length === 1 ? (
+                        <img
+                            className="w-full h-auto object-cover cursor-pointer rounded-md"
+                            alt="post"
+                            src={`http://localhost:4000/api/v1/${post.imageUrls[0]}`}
+                            onClick={() => showImageModal(0)}
+                        />
+                    ) : (
+                        <ResponsiveMasonry
+                            columnsCountBreakPoints={{ 350: 1, 750: 2, 1200: 2 }}
+                            gutterBreakPoints={{ 350: "8px", 750: "8px", 1200: "8px" }} >
+                            <Masonry>
+                                {post.imageUrls.map((imageUrl, index) => (
+                                    <div key={index} className="mb-1 rounded-md overflow-hidden">
+                                        <img
+                                            className="w-full h-auto block cursor-pointer object-cover"
+                                            alt={`post-${index}`}
+                                            src={`http://localhost:4000/api/v1/${imageUrl}`}
+                                            onClick={() => showImageModal(index)}
+                                        />
+                                    </div>
+                                ))}
+                            </Masonry>
+                        </ResponsiveMasonry>
+                    )}
+                </div>
+            )}
+
+            <Divider solid className='my-3 bg-slate-400 bg-opacity-20'></Divider>
+            <div className="flex items-center justify-between">
+                <div><HeartOutlined className=" mx-5 text-lg cursor-pointer" /></div>
+                <div className='flex'><CommentOutlined className="ml-5 mr-1 text-lg cursor-pointer" /><p>Comments</p></div>
+            </div>
+
             <Modal
                 visible={modalVisible}
-                onCancel={handleCancel}
+                onCancel={handleCancelModal}
                 footer={null}
                 bodyStyle={{ padding: 0 }}
             >
@@ -125,17 +98,13 @@ const PostsComponent = ({ post}) => {
                     dots={false}
                     autoplay={false}
                     arrows={true}
-                    className='w-auto p-3' // Enable arrows for navigation
+                    className='w-auto p-3'
                 >
                     {post.imageUrls &&
                         post.imageUrls.map((imageUrl, index) => (
                             <div key={index} className='w-auto'>
                                 <img
-                                    style={{
-                                        width: '100%',
-                                        height: 'auto',
-                                        objectFit: 'cover',
-                                    }}
+                                    className="w-full h-auto object-cover"
                                     alt={`full-post-${index}`}
                                     src={`http://localhost:4000/api/v1/${imageUrl}`}
                                 />
@@ -143,6 +112,8 @@ const PostsComponent = ({ post}) => {
                         ))}
                 </Carousel>
             </Modal>
+
+           
         </div>
     );
 };
