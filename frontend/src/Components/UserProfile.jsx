@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
  import NavigationBar from './NavigationBar';
  import CreatePost from './CreatePost';
  import LinksCard from './Links';
+ import Comments from './Comments';
  import { CameraFilled, EditFilled, DeleteOutlined, EllipsisOutlined, HeartOutlined, CommentOutlined, HeartFilled } from '@ant-design/icons';
  import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
@@ -25,6 +26,8 @@ import React, { useState, useEffect } from 'react';
   const [editForm] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [commentModalVisible, setCommentModalVisible] = useState(false);
+
 
   const fetchUserProfile = async () => {
    try {
@@ -183,6 +186,14 @@ import React, { useState, useEffect } from 'react';
    return post.likes && post.likes[userId];
   };
 
+  const handlComment = ()=> {
+    setCommentModalVisible(true);
+  }
+
+  const handleCancelCommentModal = () => {
+    setCommentModalVisible(false);
+    }
+
   return (
    <div className='bg-slate-200 shadow-lg overflow-x-hidden'>
     <NavigationBar />
@@ -268,7 +279,7 @@ import React, { useState, useEffect } from 'react';
          <div onClick={() => handleLike(post.id)} className="cursor-pointer">
           {isLiked(post) ? <HeartFilled className=" mx-5 text-lg text-red-500" /> : <HeartOutlined className=" mx-5 text-lg" />}
          </div>
-         <div className='flex'><CommentOutlined className="ml-5 mr-1 text-lg cursor-pointer" /><p>Comments</p></div>
+         <div onClick={handlComment} className='flex cursor-pointer'><CommentOutlined className="ml-5 mr-1 text-lg " /><p>Comments</p></div>
         </div>
        </div>
       ))}
@@ -365,6 +376,15 @@ import React, { useState, useEffect } from 'react';
       </Form.Item>
      </Form>
     </Modal>
+    
+    <Modal
+     title="Comments"
+     visible={commentModalVisible}
+     onCancel={handleCancelCommentModal}
+     footer={null}>
+      <Comments/>
+    </Modal>
+
    </div>
   );
  };

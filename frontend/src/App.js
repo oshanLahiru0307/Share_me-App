@@ -4,6 +4,8 @@ import Home from "./Components/Home";
 import UserProfile from "./Components/UserProfile";
 import MyNetwork from "./Components/MyNetwork";
 import Event from "./Components/Event";
+import UserLogin from "./Components/UserLogin";
+import UserRegister from "./Components/UserRegister";
 
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
           <Route path="/userProfile/:id" element={<UserProfile/>}/>
           <Route path="/myNetwork" element={<MyNetwork/>}/>
           <Route path="/events" element={<Event/>}/>
+          <Route path="/login" element={<UserLogin/>}/>
+          <Route path="/register" element={<UserRegister/>}/>
         </Routes>
       </Router>
     </div>

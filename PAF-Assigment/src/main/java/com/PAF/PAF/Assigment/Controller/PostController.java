@@ -44,7 +44,7 @@ public class PostController {
     public List<PostEntity> getUserPosts(@PathVariable String userId){
         return postService.getPostsByUser(userId);
     }
-
+    
     @PostMapping("/createPost")
     public PostEntity createPost(@RequestParam ("userId") String userId,
                                  @RequestParam("username") String username,

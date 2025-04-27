@@ -104,6 +104,28 @@ class UserServices {
             throw error;       
         }
     }
+    
+    static async loginUser(formData){
+        try{
+            const response = await axios.post(`${API_URL}/login`, formData);
+            return response.data;
+        }catch(error){
+            console.error("userlogin error:", error);
+            throw error;       
+        }
+    }
+
+    static async addUser(formData){
+        try{
+            const response = await axios.post(`${API_URL}/createUser`, formData);
+            return response.data;
+        }catch(error){
+            console.error("userRegister error:", error);
+            throw error;       
+        }
+    }
+
+
 
 }
 

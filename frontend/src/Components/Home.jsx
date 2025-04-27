@@ -46,13 +46,13 @@ const Home = () => {
           ))}
         </div>
         <div>
-          <div className="w-auto h-[350px] bg-white rounded-lg shadow-lg p-4 sticky top-24 ">
+          <div className="w-auto h-[400px] bg-white rounded-lg shadow-lg p-4 sticky top-24 ">
             <p className="text-blue-500 text-lg font-semibold pb-2">Add to your feed</p>
-            <div className='h-[250px] sticky top-5 overflow-y-auto pb-4 px-4'>
+            <div className='h-[320px] sticky top-5 overflow-y-auto pb-4 px-4'>
               <UserList />
             </div>
           </div>
-          <div className='sticky top-[470px]'>
+          <div className='sticky top-[510px]'>
             <LinksCard />
           </div>
         </div>

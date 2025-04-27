@@ -81,9 +81,9 @@ class PostController {
         }
     }
 
-    static async commentPost(postId, commentData) {
+    static async addCommentPost(postId, userId, commentData) {
         try {
-            const response = await axios.post(`${BASE_URL}/commentPost/${postId}`, commentData)
+            const response = await axios.post(`${BASE_URL}/${postId}/addComment/${userId}`, commentData)
             return response.data
         } catch (error) {
             console.error('Error commenting on post:', error)

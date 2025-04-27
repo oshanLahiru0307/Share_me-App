@@ -73,6 +73,10 @@ public class UserController {
     }
 
 
+    @PostMapping("/login")
+    public UserEntity login(@RequestBody UserEntity loginDetails) {
+        return userService.loginUser(loginDetails);
+    }
 
 
     @PostMapping("/uploadProfileImage/{userId}")
