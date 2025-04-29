@@ -67,7 +67,7 @@ const NavigationBar = () => {
           </li>
           <li>
 
-            <Link className='flex flex-col items-center gap-2' to="/learning">
+            <Link className='flex flex-col items-center gap-2' to="/lerning">
             <LaptopOutlined/>
             <p className='text-xs font-semibold'>Learning</p>
             </Link>

@@ -4,7 +4,8 @@ import Home from "./Components/Home";
 import UserProfile from "./Components/UserProfile";
 import MyNetwork from "./Components/MyNetwork";
 import Event from "./Components/Event";
-
+import Lerning from "./Components/lerning";
+import AddLearningPlan from "./Components/AddLearningPlan";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
           <Route path="/userProfile" element={<UserProfile/>}/>
           <Route path="/myNetwork" element={<MyNetwork/>}/>
           <Route path="/events" element={<Event/>}/>
+          <Route path="/lerning" element={<Lerning/>}/>
+          <Route path="/addLearningPlan" element={<AddLearningPlan/>}/>
+          {/* Add more routes as needed */}
         </Routes>
       </Router>
     </div>
