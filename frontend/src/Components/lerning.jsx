@@ -2,7 +2,6 @@ import NavBar from "./NavigationBar";
 import ProfileCard from "./ProfileCard";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../Pages/LearningPlan/post.css";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { IoIosCreate } from "react-icons/io";
@@ -13,6 +12,7 @@ function Lerning() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [searchOwnerName, setSearchOwnerName] = useState("");
   const userId = localStorage.getItem("userID");
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -281,40 +281,55 @@ function Lerning() {
   };
 
   return (
-    <div className="bg-slate-200 h-auto ">
+    <div className="bg-slate-200 min-h-screen">
       <NavBar />
       <div className="mt-10 mx-6 flex flex-row gap-10">
         <div>
           <ProfileCard />
         </div>
-        <div className="continSection">
-          <div
-            className="add_new_btn"
-            onClick={() => (window.location.href = "/addLearningPlan")}
-          >
-            <IoIosCreate className="add_new_btn_icon" />
-          </div>
-          <div className="post_card_continer">
-            {filteredPosts.length === 0 ? (
-              <div className="not_found_box">
-                <div className="not_found_img"></div>
-                <p className="not_found_msg">
-                  No posts found. Please create a new post.
-                </p>
-                <button
-                  className="not_found_btn"
+        <div className="w-full min-h-screen bg-white rounded-lg shadow-lg p-4 pt-14 sticky top-24 mb-10">
+          <div className="flex flex-col items-center justify-center ">
+            {/* Add New Button (commented out) */}
+            {/* <div
+              className="fixed z-50 bottom-12 right-12 bg-cyan-900 rounded-full border border-cyan-900 w-12 h-12 flex items-center justify-center cursor-pointer"
+              onClick={() => (window.location.href = "/addLearningPlan")}
+            >
+              <IoIosCreate className="text-3xl text-white" />
+            </div> */}
+            <div>
+              {filteredPosts.length === 0 ? (
+                <div className="w-[670px] border border-cyan-900 rounded-md flex flex-col items-center justify-center p-6 gap-6">
+                  {!imgError ? (
+                    <img
+                      src="/img/notfound.png"
+                      alt="No posts found"
+                      className="w-[300px] h-[200px] object-contain"
+                      onError={() => setImgError(true)}
+                    />
+                  ) : (
+                    <div className="w-[300px] h-[200px] flex items-center justify-center text-gray-400 bg-gray-100 rounded">
+                      {/* fallback content if image not found */}
+                      No image available
+                    </div>
+                  )}
+                  <p className="text-gray-600 text-lg">
+                    No posts found. Please create a new post.
+                  </p>
+                  <button
+                  className="w-40 mx-auto py-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg flex justify-center"
                   onClick={() => (window.location.href = "/addLearningPlan")}
-                >
-                  Create New Post
-                </button>
-              </div>
-            ) : (
-              filteredPosts.map((post) => (
-                <div key={post.id} className="post_card_new">
-                  {renderPostByTemplate(post)}
+                  >
+                    Create New Post
+                  </button>
                 </div>
-              ))
-            )}
+              ) : (
+                filteredPosts.map((post) => (
+                  <div key={post.id} className="w-[700px] mb-6">
+                    {renderPostByTemplate(post)}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>
