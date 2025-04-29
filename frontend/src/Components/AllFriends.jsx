@@ -8,18 +8,8 @@ import UserService from '../ServiceController/UserServices'
 const AllFriends = () => {
     const snap = useSnapshot(userState)
     const userId = snap.userId
-    const [user, setUser] = useState({})
     const [friends, setFriends] = useState([])
 
-    const fetchUserProfile = async () => {
-        try {
-            const response = await UserService.getUserById(userId)
-            console.log('User Profile:', response)
-            setUser(response)
-        } catch (error) {
-            console.error('Error fetching user profile:', error)
-        }
-    }
 
     const fetchNonFriends = async () => {
         try {
@@ -32,7 +22,6 @@ const AllFriends = () => {
     }
 
     useEffect(() => {
-        fetchUserProfile()
         fetchNonFriends()
     }, [])
 

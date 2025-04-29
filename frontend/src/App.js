@@ -4,8 +4,11 @@ import Home from "./Components/Home";
 import UserProfile from "./Components/UserProfile";
 import MyNetwork from "./Components/MyNetwork";
 import Event from "./Components/Event";
+import UserLogin from "./Components/UserLogin";
+import UserRegister from "./Components/UserRegister";
 import Lerning from "./Components/lerning";
 import AddLearningPlan from "./Components/AddLearningPlan";
+
 
 function App() {
   return (
@@ -13,12 +16,13 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/userProfile" element={<UserProfile/>}/>
+          <Route path="/userProfile/:id" element={<UserProfile/>}/>
           <Route path="/myNetwork" element={<MyNetwork/>}/>
           <Route path="/events" element={<Event/>}/>
+          <Route path="/login" element={<UserLogin/>}/>
+          <Route path="/register" element={<UserRegister/>}/>
           <Route path="/lerning" element={<Lerning/>}/>
           <Route path="/addLearningPlan" element={<AddLearningPlan/>}/>
-          {/* Add more routes as needed */}
         </Routes>
       </Router>
     </div>

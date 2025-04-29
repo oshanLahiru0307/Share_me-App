@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
-// import "../Pages/LearningPlan/Templates.css";
 import NavBar from "./NavigationBar";
 import ProfileCard from "./ProfileCard";
 import { FaVideo } from "react-icons/fa";
@@ -19,7 +18,7 @@ function AddLearningPlan() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showContentURLInput, setShowContentURLInput] = useState(false);
   const [showImageUploadInput, setShowImageUploadInput] = useState(false);
-  const [templateID, setTemplateID] = useState(null);
+  const [templateID, setTemplateID] = useState(""); // was null
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [category, setCategory] = useState("");
@@ -55,15 +54,11 @@ function AddLearningPlan() {
       return;
     }
 
-    const postOwnerID = localStorage.getItem("userID");
-    const postOwnerName = localStorage.getItem("userFullName");
+    const postOwnerID = 1236548;
+    const postOwnerName = "saman";
+    
 
-    if (!postOwnerID) {
-      alert("Please log in to add a post.");
-      navigate("/");
-      return;
-    }
-
+  
     if (tags.length < 2) {
       alert("Please add at least two tags.");
       setIsSubmitting(false);
@@ -82,7 +77,7 @@ function AddLearningPlan() {
         const formData = new FormData();
         formData.append("file", image);
         const uploadResponse = await axios.post(
-          "http://localhost:8080/learningPlan/planUpload",
+          "http://localhost:4000/learningPlan/planUpload",
           formData,
           {
             headers: {
@@ -99,8 +94,8 @@ function AddLearningPlan() {
         description,
         contentURL,
         tags,
-        postOwnerID,
-        postOwnerName,
+        postOwnerID:1236548,
+         postOwnerName:postOwnerName,
         imageUrl,
         templateID,
         startDate, // New field
@@ -109,9 +104,9 @@ function AddLearningPlan() {
       };
 
       // Submit the post data
-      await axios.post("http://localhost:8080/learningPlan", newPost);
+      await axios.post("http://localhost:4000/learningPlan", newPost);
       alert("Post added successfully!");
-      navigate("/allLearningPlan");
+      navigate("/lerning");
     } catch (error) {
       console.error("Error adding post:", error);
       alert("Failed to add post.");
@@ -476,7 +471,7 @@ function AddLearningPlan() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-40 mx-auto py-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg flex justify-center"
+                  className="w-40 mx-auto py-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg   text-base flex justify-center"
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </button>

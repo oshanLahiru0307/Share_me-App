@@ -73,21 +73,11 @@ public class UserController {
     }
 
 
-    public String saveAndGetImageUrl(MultipartFile Imagefile) throws IOException {
-        Path filePath = Paths.get(UPLOAD_DIRECTORY);
-
-        if(!Files.exists(filePath)){
-            Files.createDirectories(filePath);
-        }
-
-        String fileName = UUID.randomUUID().toString() + "_" + Imagefile.getOriginalFilename();
-        Path filePathWithName = filePath.resolve(fileName);
-        Files.copy(Imagefile.getInputStream(), filePathWithName);
-
-        String url = UPLOAD_DIRECTORY+"/"+fileName;
-
-        return url;
+    @PostMapping("/login")
+    public UserEntity login(@RequestBody UserEntity loginDetails) {
+        return userService.loginUser(loginDetails);
     }
+
 
     @PostMapping("/uploadProfileImage/{userId}")
     public UserEntity uploadProfileImage(@PathVariable String userId, @RequestParam("profileImage") MultipartFile file) throws IOException {
@@ -111,7 +101,7 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("uploads/users/{filename}")
+    @GetMapping("/uploads/users/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {
             Path filePath = Paths.get(UPLOAD_DIRECTORY).resolve(filename);
@@ -141,5 +131,20 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    public String saveAndGetImageUrl(MultipartFile Imagefile) throws IOException {
+        Path filePath = Paths.get(UPLOAD_DIRECTORY);
+
+        if(!Files.exists(filePath)){
+            Files.createDirectories(filePath);
+        }
+
+        String fileName = UUID.randomUUID().toString() + "_" + Imagefile.getOriginalFilename();
+        Path filePathWithName = filePath.resolve(fileName);
+        Files.copy(Imagefile.getInputStream(), filePathWithName);
+
+        String url = UPLOAD_DIRECTORY+"/"+fileName;
+
+        return url;
+    }
 }
- 

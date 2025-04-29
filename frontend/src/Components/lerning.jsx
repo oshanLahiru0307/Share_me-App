@@ -4,25 +4,20 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
-import { IoIosCreate } from "react-icons/io";
 import { HiCalendarDateRange } from "react-icons/hi2";
 
 function Lerning() {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [searchOwnerName, setSearchOwnerName] = useState("");
-  const userId = localStorage.getItem("userID");
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/learningPlan");
-        const userPosts = response.data.filter(
-          (post) => post.postOwnerID === userId
-        ); // Filter posts by userID
-        setPosts(userPosts);
-        setFilteredPosts(userPosts); // Initially show filtered posts
+        const response = await axios.get("http://localhost:4000/learningPlan");
+        setPosts(response.data);
+        setFilteredPosts(response.data);
+        
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -54,7 +49,7 @@ function Lerning() {
     );
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8080/learningPlan/${id}`);
+        await axios.delete(`http://localhost:4000/learningPlan/${id}`);
         alert("Post deleted successfully!");
         setFilteredPosts(filteredPosts.filter((post) => post.id !== id)); // Update the list after deletion
       } catch (error) {
@@ -126,7 +121,7 @@ function Lerning() {
             </div>
             {post.imageUrl && (
               <img
-                src={`http://localhost:8080/learningPlan/planImages/${post.imageUrl}`}
+                src={`http://localhost:4000/learningPlan/planImages/${post.imageUrl}`}
                 alt={post.title}
                 className="iframe_preview_dis"
               />
@@ -189,7 +184,7 @@ function Lerning() {
               <div className="preview_part_sub">
                 {post.imageUrl && (
                   <img
-                    src={`http://localhost:8080/learningPlan/planImages/${post.imageUrl}`}
+                    src={`http://localhost:4000/learningPlan/planImages/${post.imageUrl}`}
                     alt={post.title}
                     className="iframe_preview"
                   />
@@ -235,7 +230,7 @@ function Lerning() {
             </div>
             {post.imageUrl && (
               <img
-                src={`http://localhost:8080/learningPlan/planImages/${post.imageUrl}`}
+                src={`http://localhost:4000/learningPlan/planImages/${post.imageUrl}`}
                 alt={post.title}
                 className="iframe_preview_dis"
               />
@@ -317,7 +312,7 @@ function Lerning() {
                   </p>
                   <button
                   className="w-40 mx-auto py-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg flex justify-center"
-                  onClick={() => (window.location.href = "/addLearningPlan")}
+                    onClick={() => (window.location.href = "/addLearningPlan")}
                   >
                     Create New Post
                   </button>

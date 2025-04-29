@@ -1,8 +1,16 @@
 import {proxy} from 'valtio'
 
+let storedUser = null;
+
+try {
+  const user = localStorage.getItem("user");
+  storedUser = user ? JSON.parse(user) : null;
+} catch (error) {
+  console.error("Error parsing user from localStorage:", error);
+}
+
 const usrState = proxy({
-    
-    userId: "67f0f9637bb3f0368bd09c44",
+    userId: storedUser,
 })
 
 export default usrState

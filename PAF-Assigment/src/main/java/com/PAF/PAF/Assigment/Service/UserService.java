@@ -115,4 +115,11 @@ public class UserService {
         return userRepo.findNonFriends(friendIds, currentUserId);
     }
 
+     public UserEntity loginUser(UserEntity loginDetails) {
+         UserEntity user = userRepo.findByEmail(loginDetails.getEmail()).orElse(null);
+         if (user != null && user.getPassword().equals(loginDetails.getPassword())) {
+             return user;
+         }
+         return null;
+     }
 }

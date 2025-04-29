@@ -1,4 +1,4 @@
-package com.PAF.PAF.Assigment.WebConfig;
+package com.PAF.PAF.Assigment.Config;
 
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
