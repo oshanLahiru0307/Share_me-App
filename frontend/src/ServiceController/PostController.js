@@ -101,6 +101,18 @@ class PostController {
         }
     }
 
+    static async updateCommentPost(postId, userId, commentData) {
+        try {
+            const response = await axios.post(`${BASE_URL}/${postId}/editComment/${userId}`, commentData)
+            return response.data
+        } catch (error) {
+            console.error('Error commenting on post:', error)
+            throw error
+        }
+    }
+
+    
+
 }
 
 export default PostController

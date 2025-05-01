@@ -150,7 +150,7 @@ const UserProfile = () => {
 
   const handleDeletePost = async (post) => {
     try {
-      await PostController.deletePost(post.id);
+      await PostController.deletePost(post.id,);
       message.success('Post deleted successfully');
       setShowModalTODelete(false);
       setPostToDelete(null);
@@ -215,17 +215,17 @@ const UserProfile = () => {
     return post.likes && post.likes[userId];
   };
 
-  const handleAddComment = async (values) => {
+  const handleAddComment = async (commentText) => {
     try {
       if (selectedComment) {
-        const response = await PostController.updateComment(currentPostIdForComment, selectedComment, userId, values.comment);
+        const response = await PostController.addCommentPost(currentPostIdForComment, userId, commentText);
         console.log('Comment updated:', response);
         message.success('Comment updated successfully');
         setSelectedComment(null);
         commentForm.resetFields();
         handleCommentClick(currentPostIdForComment);
       } else {
-        const response = await PostController.addCommentPost(currentPostIdForComment, userId, values.comment);
+        const response = await PostController.addCommentPost(currentPostIdForComment, userId, commentText);
         console.log('Comment added:', response);
         message.success('Comment added successfully');
         commentForm.resetFields();
@@ -269,7 +269,7 @@ const UserProfile = () => {
 
   const handleDeleteComment = async (commentId) => {
     try {
-      await PostController.deleteComment(currentPostIdForComment, commentId, userId);
+      await PostController.deleteComment(currentPostIdForComment, commentId);
       message.success('Comment deleted successfully');
       handleCommentClick(currentPostIdForComment); // Refresh comments
     } catch (error) {
