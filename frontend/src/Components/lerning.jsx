@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { IoIosCreate } from "react-icons/io";
-import NavBar from './NavigationBar';
-import ProfileCard from './ProfileCard';
+import NavBar from "./NavigationBar";
+import ProfileCard from "./ProfileCard";
 import { HiCalendarDateRange } from "react-icons/hi2";
 import { useParams, useNavigate } from "react-router-dom";
 
-function renderPostTailwind(post, userId, handleUpdate, handleDelete, getEmbedURL) {
+function renderPostTailwind(
+  post,
+  userId,
+  handleUpdate,
+  handleDelete,
+  getEmbedURL
+) {
   const isOwner = String(post.postOwnerID) === String(userId);
 
   switch (post.templateID) {
@@ -46,7 +52,10 @@ function renderPostTailwind(post, userId, handleUpdate, handleDelete, getEmbedUR
             )}
           </div>
           <hr className="my-2" />
-          <p className="text-sm text-gray-600 mb-2" style={{ whiteSpace: "pre-line" }}>
+          <p
+            className="text-sm text-gray-600 mb-2"
+            style={{ whiteSpace: "pre-line" }}
+          >
             {post.description}
           </p>
           <div className="flex flex-wrap gap-2 mb-2">
@@ -114,7 +123,10 @@ function renderPostTailwind(post, userId, handleUpdate, handleDelete, getEmbedUR
             )}
           </div>
           <hr className="my-2" />
-          <p className="text-sm text-gray-600 mb-2" style={{ whiteSpace: "pre-line" }}>
+          <p
+            className="text-sm text-gray-600 mb-2"
+            style={{ whiteSpace: "pre-line" }}
+          >
             {post.description}
           </p>
           <div className="flex gap-2 mt-2">
@@ -204,7 +216,10 @@ function renderPostTailwind(post, userId, handleUpdate, handleDelete, getEmbedUR
               allowFullScreen
             ></iframe>
           )}
-          <p className="text-sm text-gray-600 mt-2 mb-2" style={{ whiteSpace: "pre-line" }}>
+          <p
+            className="text-sm text-gray-600 mt-2 mb-2"
+            style={{ whiteSpace: "pre-line" }}
+          >
             {post.description}
           </p>
           <div className="flex flex-wrap gap-2 mt-2">
@@ -239,7 +254,7 @@ function Lerning() {
   const navigate = useNavigate();
 
   // Use userId from URL param if present, else from localStorage
-  const userId = id || localStorage.getItem('userID');
+  const userId = id || localStorage.getItem("userID");
 
   useEffect(() => {
     // Redirect to login if not logged in
@@ -252,12 +267,12 @@ function Lerning() {
         const response = await axios.get("http://localhost:4000/learningPlan");
         // Only show posts belonging to the logged-in user or userId param
         const userPosts = response.data.filter(
-          post => String(post.postOwnerID) === String(userId)
+          (post) => String(post.postOwnerID) === String(userId)
         );
         setPosts(userPosts);
         setFilteredPosts(userPosts);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       }
     };
 
@@ -281,15 +296,17 @@ function Lerning() {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this post?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
     if (confirmDelete) {
       try {
         await axios.delete(`http://localhost:4000/learningPlan/${id}`);
-        alert('Post deleted successfully!');
+        alert("Post deleted successfully!");
         setFilteredPosts(filteredPosts.filter((post) => post.id !== id));
       } catch (error) {
-        console.error('Error deleting post:', error);
-        alert('Failed to delete post.');
+        console.error("Error deleting post:", error);
+        alert("Failed to delete post.");
       }
     }
   };
@@ -307,7 +324,10 @@ function Lerning() {
       <div className="mt-10 mx-6 flex flex-row gap-10">
         <ProfileCard />
         <div className="w-full bg-white rounded-lg shadow-lg p-4 pt-14 sticky top-24 mb-10">
-          <div className="flex justify-end mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-semibold text-blue-500">
+              Lerning Plans
+            </h2>
             <button
               className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg text-base"
               onClick={() => navigate("/addLearningPlan")}
@@ -315,6 +335,10 @@ function Lerning() {
               Add Learning Plan
             </button>
           </div>
+          <hr className="mb-6 border-blue-200" />
+
+          <ul className="list-none p-0"></ul>
+          <div className="flex justify-end mb-8"></div>
           <div className="flex flex-col items-center justify-center">
             {filteredPosts.length === 0 ? (
               <div className="w-[670px] border border-cyan-900 rounded-md flex flex-col items-center justify-center p-6 gap-6">
@@ -343,7 +367,13 @@ function Lerning() {
             ) : (
               filteredPosts.map((post) => (
                 <div key={post.id} className="w-[700px] mb-6">
-                  {renderPostTailwind(post, userId, handleUpdate, handleDelete, getEmbedURL)}
+                  {renderPostTailwind(
+                    post,
+                    userId,
+                    handleUpdate,
+                    handleDelete,
+                    getEmbedURL
+                  )}
                 </div>
               ))
             )}
