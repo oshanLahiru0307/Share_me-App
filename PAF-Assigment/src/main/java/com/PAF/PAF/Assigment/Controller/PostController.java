@@ -69,7 +69,7 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/addComment/{userId}")
-    public PostEntity addComment(@PathVariable String postId, @PathVariable String userId, @RequestBody String comment){
+    public PostEntity addComment(@PathVariable String postId, @PathVariable String userId, @RequestParam(value="comment") String comment){
         return postService.addComment(postId, userId, comment);
     }
 
@@ -104,7 +104,7 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}/editComment/{userId}")
-    public PostEntity editComment(@PathVariable String postId, @PathVariable String userId, @RequestBody String comment){
+    public PostEntity editComment(@PathVariable String postId, @PathVariable String userId, @RequestParam String comment){
         return postService.editComment(postId, userId, comment);
     }
 
