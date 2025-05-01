@@ -150,7 +150,7 @@ const UserProfile = () => {
 
   const handleDeletePost = async (post) => {
     try {
-      await PostController.deletePost(post.id,);
+      await PostController.deletePost(post.id);
       message.success('Post deleted successfully');
       setShowModalTODelete(false);
       setPostToDelete(null);
@@ -269,7 +269,7 @@ const UserProfile = () => {
 
   const handleDeleteComment = async (commentId) => {
     try {
-      await PostController.deleteComment(currentPostIdForComment, commentId);
+      await PostController.deleteComment(currentPostIdForComment, commentId, userId);
       message.success('Comment deleted successfully');
       handleCommentClick(currentPostIdForComment); // Refresh comments
     } catch (error) {
