@@ -150,8 +150,8 @@ public class EventController {
     }
 
     @DeleteMapping("/deleteEvent/{id}")
-    public void deleteEvent(@PathVariable("id") String id) {
-        eventServices.deleteEvent(id);
+    public EventEntity deleteEvent(@PathVariable("id") String id) {
+        return eventServices.deleteEvent(id);
     }
 
 

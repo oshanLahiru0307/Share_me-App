@@ -103,6 +103,11 @@ public class PostController {
         return new ResponseEntity<>(updatedPost, HttpStatus.OK);
     }
 
+    @PatchMapping("/{postId}/editComment/{userId}")
+    public PostEntity editComment(@PathVariable String postId, @PathVariable String userId, @RequestBody String comment){
+        return postService.editComment(postId, userId, comment);
+    }
+
     @DeleteMapping("/{postId}/deleteComment/{userId}")
     public PostEntity deleteComment(@PathVariable String postId, @PathVariable String userId){
         return postService.deleteComment(postId, userId);
@@ -166,5 +171,7 @@ public class PostController {
             }
         }
     }
+
+
 
 }

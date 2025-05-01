@@ -5,7 +5,7 @@ import logo from '../assets/airbnb_1724634.png'
 
 const LinksCard = () => {
     return (
-        <div className='w-[auto] bg-white h-auto rounded-lg shadow-lg mt-6 p-4 flex flex-col '>
+        <div className='w-[auto] bg-white h-auto rounded-lg shadow-lg mt-6 mb-4 p-4 flex flex-col '>
             <div className='flex flex-col gap-3'>
                 <div className='flex justify-around items-top gap-12'>
                     <div className='flex flex-col gap-3'>
