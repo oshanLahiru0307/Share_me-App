@@ -35,14 +35,14 @@ const NavigationBar = () => {
     <div className='sticky top-0 z-10'>
       <div className='w-full flex justify-between items-center bg-gradient-to-r from-blue-50 to-blue-500  shadow-lg px-16 py-3 sticky'>
       <div className='flex items-center'>
-        <Link to='/'><img src={logo} alt="Logo" style={{ width: "50px", height: "50px" }} /></Link>
-        <Link to='/'><h1 className='mx-3 text-blue-500 font-semibold text-lg'>Share Me</h1></Link>
+        <Link to='/home'><img src={logo} alt="Logo" style={{ width: "50px", height: "50px" }} /></Link>
+        <Link to='/home'><h1 className='mx-3 text-blue-500 font-semibold text-lg'>Share Me</h1></Link>
         <Search placeholder="Search" allowClear style={{ width: 300 }} />
       </div>
       <div>
         <ul className='flex items-center space-x-12'>
           <li>
-            <Link className='flex flex-col items-center gap-2 text-black' to="/">
+            <Link className='flex flex-col items-center gap-2 text-black' to="/home">
               <HomeFilled />
               <p className='text-xs font-semibold'>Home</p>
             </Link>

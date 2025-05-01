@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
  import { useParams, useNavigate } from 'react-router-dom';
- import { Avatar, Button, Menu, Dropdown, Form, Input, Modal as AntdModal, Upload, message, Divider, Carousel, Modal } from 'antd';
+ import { Avatar, Button, Menu, Dropdown, Form, Input, Modal as AntdModal, Upload, message, Divider, Carousel, Modal, Popconfirm } from 'antd';
  import UserService from '../ServiceController/UserServices';
  import PostController from '../ServiceController/PostController';
  import UserList from './UserList';
@@ -28,6 +28,8 @@ import React, { useState, useEffect } from 'react';
   const [commentModalVisible, setCommentModalVisible] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentUsers, setCoomentUsers] = useState({}); 
+  const [posttoDelete, setPostToDelete] = useState(null);
+  const [showmodalTODelete, setShowModalTODelete] = useState(false);
 
 
   const fetchUserProfile = async () => {
@@ -102,20 +104,13 @@ import React, { useState, useEffect } from 'react';
    setCurrentImageIndex(0);
   };
 
-  const handleMenuClick = (e, post) => {
-   if (e.key === 'edit') {
-    handleEditPost(post);
-   } else if (e.key === 'delete') {
-    handleDeletePost(post);
-   }
-  };
 
   const postMenu = (post) => (
-   <Menu onClick={(e) => handleMenuClick(e, post)}>
-    <Menu.Item key="edit">
+   <Menu >
+    <Menu.Item key="edit" onClick={() => handleEditPost(post)}>
      <EditFilled /> Edit
     </Menu.Item>
-    <Menu.Item key="delete">
+    <Menu.Item key="delete" onClick={() => showDeleteConfirm(post)}>
      <DeleteOutlined /> Delete
     </Menu.Item>
    </Menu>
@@ -145,25 +140,28 @@ import React, { useState, useEffect } from 'react';
    editForm.resetFields();
   };
 
-  const handleDeletePost = (post) => {
-   AntdModal.confirm({
-    title: 'Confirm Delete',
-    content: 'Are you sure you want to delete this post?',
-    async onOk() {
+  const showDeleteConfirm = (post) => {
+   setPostToDelete(post);
+   showModalTODelete(post); 
+  }
+
+  const showModalTODelete = (post) => {
+    setShowModalTODelete(true);
+  }
+
+  const handleDeletePost = async (post) => {
      try {
       await PostController.deletePost(post.id);
       message.success('Post deleted successfully');
+      setShowModalTODelete(false);
+      setPostToDelete(null);
       fetchPosts();
      } catch (error) {
       console.error('Error deleting post:', error);
       message.error('Failed to delete post');
      }
-    },
-    onCancel() {
-     console.log('Delete cancelled');
-    },
-   });
-  };
+    }
+
 
   const handleEditFormFinish = async (values) => {
    try {
@@ -445,6 +443,23 @@ import React, { useState, useEffect } from 'react';
        <Button type='primary' className='w-auto'>Comment</Button>
       </div>
     </Modal>
+    
+    <Modal
+     title="Confirm Delete"
+     visible={showmodalTODelete}
+     onCancel={() => setShowModalTODelete(false)}
+     footer={[
+      <Button key="cancel" onClick={() => setShowModalTODelete(false)}>
+       Cancel
+      </Button>,
+      <Button key="delete" type="primary" danger onClick={() => handleDeletePost(posttoDelete)}>
+       Delete
+      </Button>,
+     ]}>
+      <p>Are you sure you want to delete this post?</p>
+    </Modal>
+    
+  
 
    </div>
   );
