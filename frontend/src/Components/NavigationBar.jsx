@@ -73,7 +73,7 @@ const NavigationBar = () => {
             </Link>
           </li>
           <li>
-            <Link className='flex flex-col items-center gap-2' to="/notification">
+            <Link className='flex flex-col items-center gap-2' to="/notificationsPage">
             <BellOutlined/>
             <p className='text-xs font-semibold'>Notificaion</p>
             </Link>

@@ -1,63 +1,33 @@
 package com.PAF.PAF.Assigment.Entity;
 
-import org.springframework.data.annotation.Id; // Correct import for MongoDB
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "notifications")
 public class NotificationModel {
-    @Id
-    private String id; // Removed @GeneratedValue
-    private String userId; // The user who owns this notification
-    private String message; // Notification message
-    private boolean read; // Whether the notification has been read
-    private String createdAt; // Timestamp of the notification
+    private String id;
+    private String userId;      // The user to notify
+    private String postId;
+    private String actorId;     // The user who performed the action
+    private String type;        // "like" or "comment"
+    private String message;
+    private boolean read;
 
-    public NotificationModel() {}
+    // Getters and setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public NotificationModel(String userId, String message, boolean read, String createdAt) {
-        this.userId = userId;
-        this.message = message;
-        this.read = read;
-        this.createdAt = createdAt;
-    }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 
-    public String getId() {
-        return id;
-    }
+    public String getPostId() { return postId; }
+    public void setPostId(String postId) { this.postId = postId; }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getActorId() { return actorId; }
+    public void setActorId(String actorId) { this.actorId = actorId; }
 
-    public String getUserId() {
-        return userId;
-    }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public boolean isRead() {
-        return read;
-    }
-
-    public void setRead(boolean read) {
-        this.read = read;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
+    public boolean isRead() { return read; }
+    public void setRead(boolean read) { this.read = read; }
 }
