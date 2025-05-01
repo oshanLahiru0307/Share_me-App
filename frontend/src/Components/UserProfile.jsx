@@ -8,7 +8,6 @@ import React, { useState, useEffect } from 'react';
  import NavigationBar from './NavigationBar';
  import CreatePost from './CreatePost';
  import LinksCard from './Links';
- import Comments from './Comments';
  import { CameraFilled, EditFilled, DeleteOutlined, EllipsisOutlined, HeartOutlined, CommentOutlined, HeartFilled } from '@ant-design/icons';
  import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
@@ -27,6 +26,8 @@ import React, { useState, useEffect } from 'react';
   const [fileList, setFileList] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [commentUsers, setCoomentUsers] = useState({}); 
 
 
   const fetchUserProfile = async () => {
@@ -51,9 +52,41 @@ import React, { useState, useEffect } from 'react';
   };
 
   useEffect(() => {
+    const fetchCommentUsers = async () => {
+          const fetchedUsers = {};
+          for (const userId of Object.keys(comments)) {
+            try {
+              const response = await UserService.getUserById(userId);
+              console.log('Fetched user:', response); // Debugging line
+              if (response) {
+                fetchedUsers[userId] = response;
+              } else {
+                console.error(`Failed to fetch user data for ID: ${userId}`);
+                fetchedUsers[userId] = { name: 'Unknown User' };
+              }
+            } catch (error) {
+              console.error(`Error fetching user data for ID: ${userId}`, error);
+              fetchedUsers[userId] = { name: 'Unknown User' };
+            }
+          }
+          setCoomentUsers(fetchedUsers);
+        };
+    
+        if (comments && Object.keys(comments).length > 0) {
+          fetchCommentUsers();
+        }
    fetchUserProfile();
    fetchPosts();
-  }, [userId]);
+  }, [userId, posts]);
+
+  const getCommentObject = (commentString) => {
+    try {
+      return JSON.parse(commentString);
+    } catch (error) {
+      console.error("Error parsing comment string:", commentString, error);
+      return { comment: "Invalid Comment Data" };
+    }
+  };
 
   const showImageModal = (imageUrls, index) => {
    console.log('Showing modal for index:', index, 'with images:', imageUrls);
@@ -146,7 +179,6 @@ import React, { useState, useEffect } from 'react';
     });
 
     console.log('Form data:', formData.get('imageFiles'));
-
     const response = await PostController.updatePost(formData);
     console.log('Post updated:', response);
     message.success('Post updated successfully');
@@ -176,7 +208,7 @@ import React, { useState, useEffect } from 'react';
   const handleLike = async (postId) => {
    try {
     await PostController.likePost(postId, userId);
-    fetchPosts(); // Re-fetch posts to update like status in UI
+    fetchPosts();
    } catch (error) {
     console.error('Error liking/unliking post:', error);
    }
@@ -186,13 +218,25 @@ import React, { useState, useEffect } from 'react';
    return post.likes && post.likes[userId];
   };
 
-  const handlComment = ()=> {
+  const handlComment = async (postId)=> {
     setCommentModalVisible(true);
+    try{
+      const response = await PostController.getPostById(postId);
+      console.log('Comments:', response.comments);
+      setComments(response.comments);
+    }catch(error){
+      console.error('Error fetching comments:', error);
+      setComments([]);
+    }
   }
 
   const handleCancelCommentModal = () => {
     setCommentModalVisible(false);
-    }
+  }
+
+  const handleUploadCoverImage = async (file) => {
+
+  }
 
   return (
    <div className='bg-slate-200 shadow-lg overflow-x-hidden'>
@@ -205,7 +249,7 @@ import React, { useState, useEffect } from 'react';
       backgroundSize: 'cover',
       backgroundImage: `url("http://localhost:4000/api/v1/${user.coverImg}")`,
      }}>
-      <Button className='absolute top-[210px] right-4 font-semibold'><CameraFilled />Edit Cover Image</Button>
+      <Button className='absolute top-[210px] right-4 font-semibold' onClick={handleUploadCoverImage}><CameraFilled />Edit Cover Image</Button>
      </div>
      <Avatar
       style={{
@@ -279,7 +323,7 @@ import React, { useState, useEffect } from 'react';
          <div onClick={() => handleLike(post.id)} className="cursor-pointer">
           {isLiked(post) ? <HeartFilled className=" mx-5 text-lg text-red-500" /> : <HeartOutlined className=" mx-5 text-lg" />}
          </div>
-         <div onClick={handlComment} className='flex cursor-pointer'><CommentOutlined className="ml-5 mr-1 text-lg " /><p>Comments</p></div>
+         <div onClick={()=>handlComment(post.id)} className='flex cursor-pointer'><CommentOutlined className="ml-5 mr-1 text-lg " /><p>Comments</p></div>
         </div>
        </div>
       ))}
@@ -292,7 +336,6 @@ import React, { useState, useEffect } from 'react';
        </div>
       </div>
       <div className='sticky top-[100px]'>
-       <LinksCard />
        <LinksCard />
       </div>
      </div>
@@ -382,7 +425,25 @@ import React, { useState, useEffect } from 'react';
      visible={commentModalVisible}
      onCancel={handleCancelCommentModal}
      footer={null}>
-      <Comments/>
+          <div className='w-full h-auto mt-2'>
+            {comments && Object.entries(comments).map(([userId, commentString]) => {
+              const commentData = getCommentObject(commentString);
+              const user = commentUsers[userId] || { name: 'Unknown User' }; 
+              return (
+                <div key={userId} className='bg-slate-200 rounded-lg px-3 py-2 mb-2'>
+                  <EllipsisOutlined className='float-right text-slate-950 text-lg cursor-pointer' />
+                  <div className='flex flex-col gap-[2px]'>
+                    <p className='font-bold text-sm'>{user.name}</p>
+                    <p>{commentData.comment}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+      <div className='w-full flex flex-row gap-2 items-center justify-between mt-6'>
+       <Input placeholder='Add a comment...' className='w-[80%]' />
+       <Button type='primary' className='w-auto'>Comment</Button>
+      </div>
     </Modal>
 
    </div>
