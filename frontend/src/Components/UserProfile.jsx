@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Menu, Dropdown, Form, Input, Upload, message, Divider, Carousel, Modal } from 'antd';
+import { Avatar, Button, Menu, Dropdown, Form, Input, Upload, message, Divider, Carousel, Modal, Popconfirm } from 'antd';
 import UserService from '../ServiceController/UserServices';
 import PostController from '../ServiceController/PostController';
 import UserList from './UserList';
@@ -32,8 +32,8 @@ const UserProfile = () => {
   const [postToDelete, setPostToDelete] = useState(null);
   const [showmodalTODelete, setShowModalTODelete] = useState(false);
   const [selectedComment, setSelectedComment] = useState(null);
-  const [comment, setComment] = useState('');
-  const [postId, setPostId] = useState('');
+  const [commentText, setCommentText] = useState('');
+  const [currentPostIdForComment, setCurrentPostIdForComment] = useState('');
 
   const fetchUserProfile = async () => {
     try {
@@ -82,7 +82,7 @@ const UserProfile = () => {
     }
     fetchUserProfile();
     fetchPosts();
-  }, [comments]);
+  }, [comments, userId]);
 
   const getCommentObject = (commentString) => {
     try {
@@ -150,7 +150,7 @@ const UserProfile = () => {
 
   const handleDeletePost = async (post) => {
     try {
-      await PostController.deletePost(post.id);
+      await PostController.deletePost(post.id,);
       message.success('Post deleted successfully');
       setShowModalTODelete(false);
       setPostToDelete(null);
@@ -218,29 +218,32 @@ const UserProfile = () => {
   const handleAddComment = async (commentText) => {
     try {
       if (selectedComment) {
-        const response = await PostController.updateComment(postId, selectedComment, userId);
+        const response = await PostController.addCommentPost(currentPostIdForComment, userId, commentText);
         console.log('Comment updated:', response);
         message.success('Comment updated successfully');
         setSelectedComment(null);
         commentForm.resetFields();
-        handleCommentClick(postId);
+        handleCommentClick(currentPostIdForComment);
       } else {
-        const response = await PostController.addCommentPost(postId, userId, commentText);
+        const response = await PostController.addCommentPost(currentPostIdForComment, userId, commentText);
         console.log('Comment added:', response);
         message.success('Comment added successfully');
         commentForm.resetFields();
-        handleCommentClick(postId);
+        handleCommentClick(currentPostIdForComment);
       }
+      setCommentText(''); // Clear the input field after submission
     } catch (error) {
-      console.error('Error adding comment:', error);
-      message.error('Failed to add comment');
+      console.error('Error adding/updating comment:', error);
+      message.error('Failed to add/update comment');
     }
   };
 
   const handleCommentClick = async (postId) => {
     setCommentModalVisible(true);
-    setPostId(postId);
-    setComment('');
+    setCurrentPostIdForComment(postId);
+    commentForm.resetFields();
+    setCommentText('');
+    setSelectedComment(null);
     try {
       const response = await PostController.getPostById(postId);
       console.log('Comments:', response.comments);
@@ -251,13 +254,47 @@ const UserProfile = () => {
     }
   };
 
-  const handleNewCommentChange = (e) => {
-    setComment(e.target.value);
-  };
-
   const handleCancelCommentModal = () => {
     setCommentModalVisible(false);
-  }
+    setSelectedComment(null);
+    setCommentText('');
+  };
+
+  const handleEditComment = (commentId, commentString) => {
+    setSelectedComment(commentId);
+    const commentData = getCommentObject(commentString);
+    setCommentText(commentData.comment);
+    commentForm.setFieldsValue({ comment: commentData.comment });
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await PostController.deleteComment(currentPostIdForComment, commentId);
+      message.success('Comment deleted successfully');
+      handleCommentClick(currentPostIdForComment); // Refresh comments
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      message.error('Failed to delete comment');
+    }
+  };
+
+  const commentMenu = (commentId, commentString) => (
+    <Menu>
+      <Menu.Item key="edit" onClick={() => handleEditComment(commentId, commentString)}>
+        <EditFilled /> Edit
+      </Menu.Item>
+      <Menu.Item key="delete">
+        <Popconfirm
+          title="Are you sure you want to delete this comment?"
+          onConfirm={() => handleDeleteComment(commentId)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <DeleteOutlined /> Delete
+        </Popconfirm>
+      </Menu.Item>
+    </Menu>
+  );
 
   const handleUploadCoverImage = async (file) => {
     try {
@@ -451,14 +488,17 @@ const UserProfile = () => {
         title="Comments"
         visible={commentModalVisible}
         onCancel={handleCancelCommentModal}
-        footer={null}>
+        footer={null}
+      >
         <div className='w-full h-auto mt-2'>
-          {comments && Object.entries(comments).map(([userId, commentString]) => {
+          {comments && Object.entries(comments).map(([commentId, commentString]) => {
             const commentData = getCommentObject(commentString);
-            const user = commentUsers[userId] || { name: 'Unknown User' };
+            const user = commentUsers[commentId] || { name: 'Unknown User' };
             return (
-              <div key={userId} className='bg-slate-200 rounded-lg px-3 py-2 mb-2'>
-                <EllipsisOutlined className='float-right text-slate-950 text-lg cursor-pointer' />
+              <div key={commentId} className='bg-slate-200 rounded-lg px-3 py-2 mb-2 relative'>
+                <Dropdown overlay={commentMenu(commentId, commentString)} trigger={['click']} placement="bottomRight">
+                  <EllipsisOutlined className='absolute top-2 right-2 text-slate-950 text-lg cursor-pointer' />
+                </Dropdown>
                 <div className='flex flex-col gap-[2px]'>
                   <p className='font-bold text-sm'>{user.name}</p>
                   <p>{commentData.comment}</p>
@@ -474,11 +514,11 @@ const UserProfile = () => {
           className="mt-6"
         >
           <Form.Item name="comment" rules={[{ required: true, message: 'Please input your comment!' }]}>
-            <Input placeholder="Add a comment..." />
+            <Input placeholder="Add a comment..." value={commentText} onChange={(e) => setCommentText(e.target.value)} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Add Comment
+              {selectedComment ? 'Update Comment' : 'Add Comment'}
             </Button>
           </Form.Item>
         </Form>
@@ -495,7 +535,8 @@ const UserProfile = () => {
           <Button key="delete" type="primary" danger onClick={() => handleDeletePost(postToDelete)}>
             Delete
           </Button>,
-        ]}>
+        ]}
+      >
         <p>Are you sure you want to delete this post?</p>
       </Modal>
 
