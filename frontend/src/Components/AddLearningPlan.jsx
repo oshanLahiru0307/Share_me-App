@@ -31,6 +31,10 @@ function AddLearningPlan() {
 
   const navigate = useNavigate();
 
+  // Get user info from localStorage
+  const postOwnerID = localStorage.getItem("userID");
+  const postOwnerName = localStorage.getItem("userName");
+
   const handleAddTag = () => {
     if (tagInput.trim() !== "") {
       setTags([...tags, tagInput.trim()]);
@@ -54,11 +58,6 @@ function AddLearningPlan() {
       return;
     }
 
-    const postOwnerID = 1236548;
-    const postOwnerName = "saman";
-    
-
-  
     if (tags.length < 2) {
       alert("Please add at least two tags.");
       setIsSubmitting(false);
@@ -94,8 +93,8 @@ function AddLearningPlan() {
         description,
         contentURL,
         tags,
-        postOwnerID:1236548,
-         postOwnerName:postOwnerName,
+        postOwnerID, // from localStorage
+        postOwnerName, // from localStorage
         imageUrl,
         templateID,
         startDate, // New field
@@ -144,7 +143,7 @@ function AddLearningPlan() {
             {/* Template Previews */}
             <div className="flex flex-wrap justify-center gap-8 mb-10">
               {/* Template 1 */}
-              <div className="border border-gray-200 rounded-2xl p-6 w-full max-w-sm bg-white shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300">
+              <div className="border border-blue-400 bg-blue-50 rounded-2xl p-6 w-full max-w-sm bg-white shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300">
                 <p className="text-end text-xs font-semibold uppercase text-gray-400 tracking-wider mb-1">
                   template 1
                 </p>
