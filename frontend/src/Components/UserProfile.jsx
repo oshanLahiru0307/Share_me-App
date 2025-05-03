@@ -14,6 +14,7 @@ import LinksCard from './Links';
 
 const UserProfile = () => {
     const [commentForm] = Form.useForm();
+    const [editProfileForm] = Form.useForm();
     const userId = useParams().id;
     const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
@@ -38,6 +39,7 @@ const UserProfile = () => {
     const [coverImageModalVisible, setCoverImageModalVisible] = useState(false);
     const [coverImageFile, setCoverImageFile] = useState([]);
     const [fileUpload, setFileUpload] = useState(false);
+    const [editProfileModalShow, setEditProfileModalShow] = useState(false)
 
     const fetchUserProfile = async () => {
         try {
@@ -293,7 +295,7 @@ const UserProfile = () => {
         setFileUpload(true)
         const formData = new FormData()
         formData.append("coverImage", coverImageFile[0]); // Ensure you're sending a File object
-        console.log({"formData":formData.get("coverImage")})
+        console.log({ "formData": formData.get("coverImage") })
         try {
             const response = await UserService.uploadCoverImage(userId, formData)
             if (response) {
@@ -316,7 +318,7 @@ const UserProfile = () => {
         if (info.fileList.length > 0) {
             const newImageFiles = info.fileList.map(file => file.originFileObj).filter(Boolean);
             setCoverImageFile(newImageFiles);
-            console.log({"coverImage":coverImageFile})
+            console.log({ "coverImage": coverImageFile })
         } else {
             setCoverImageFile([]);
         }
@@ -341,10 +343,41 @@ const UserProfile = () => {
     );
 
     const handleCancelCoverImageUpload = () => {
-      setFileUpload(false)
+        setFileUpload(false)
         setCoverImageModalVisible(false)
         setCoverImageFile([])
     }
+
+    const handleCanceleditProfile = () => {
+        setEditProfileModalShow(false)
+        editProfileForm.resetFields()
+
+    }
+
+    const handleShowProfileEditModal = () => {
+        editProfileForm.setFieldsValue({
+            name: user.name,
+            occupation: user.occupation,
+            address: user.address
+        })
+        setEditProfileModalShow(true)
+    }
+
+    const handleEditProfile = async (formData) => {
+        console.log("Form Data:", formData);
+        try {
+            const response = await UserService.updateUser(formData)
+            console.log(response)
+            message.success('User Details Update Successfuly.')
+            editProfileForm.resetFields()
+            setEditProfileModalShow(false)
+            fetchUserProfile()
+        } catch (error) {
+            console.log('error while updating profile details', error)
+            message.error('Profile details update failed')
+        }
+    }
+
 
     return (
         <div className='bg-slate-200 shadow-lg overflow-x-hidden'>
@@ -371,7 +404,7 @@ const UserProfile = () => {
                     <h1 className='font-bold text-3xl mb-1'>{user.name}</h1>
                     <h1 className='font-normal mb-1'>{user.occupation}</h1>
                     <h1 className='font-normal mb-1'>{user.address}</h1>
-                    <Button className='absolute right-16 top-14 font-semibold mr-1'><EditFilled />Edit Profile</Button>
+                    <Button className='absolute right-16 top-14 font-semibold mr-1' onClick={() => { handleShowProfileEditModal() }}><EditFilled />Edit Profile</Button>
                 </div>
             </div>
 
@@ -614,6 +647,30 @@ const UserProfile = () => {
                             {coverImageFile.length >= 1 ? null : <PlusOutlined />}
                         </Upload>
                         <p className="text-gray-500 text-sm mt-1">Upload Your Cover Image Here.</p>
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal
+                title="Edit Profile Details"
+                open={editProfileModalShow}
+                onCancel={handleCanceleditProfile}
+                footer={null}
+            >
+                <Form form={editProfileForm} layout='vertical' onFinish={handleEditProfile}>
+                    <Form.Item label="Name" name="name">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item label="Occupation" name="occupation" >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item label="Address" name="address">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type='primary' htmlType='submit'>
+                            Update
+                        </Button>
                     </Form.Item>
                 </Form>
             </Modal>
