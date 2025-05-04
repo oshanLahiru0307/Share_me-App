@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Menu, Dropdown, Form, Input, Upload, message, Divider, Carousel, Modal, Popconfirm } from 'antd';
-import { CameraFilled, PlusOutlined, EditFilled, DeleteOutlined, EllipsisOutlined, HeartOutlined, CommentOutlined, HeartFilled } from '@ant-design/icons';
+import { Avatar, Button, Menu, Dropdown, Form, Input, message, Divider, Carousel, Modal, Popconfirm } from 'antd';
+import { EditFilled, DeleteOutlined, EllipsisOutlined, HeartOutlined, CommentOutlined, HeartFilled } from '@ant-design/icons';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 import UserService from '../ServiceController/UserServices';
@@ -9,12 +9,10 @@ import PostController from '../ServiceController/PostController';
 import UserList from './UserList';
 import ProfileCard from './ProfileCard';
 import NavigationBar from './NavigationBar';
-import CreatePost from './CreatePost';
 import LinksCard from './Links';
 
 const OtherUserProfile = () => {
     const [commentForm] = Form.useForm();
-    const [editProfileForm] = Form.useForm();
     const userId = useParams().id;
     const navigate = useNavigate();
     const [modalVisible, setModalVisible] = useState(false);
@@ -22,26 +20,12 @@ const OtherUserProfile = () => {
     const [user, setUser] = useState({});
     const [posts, setPosts] = useState([]);
     const [selectedPostImages, setSelectedPostImages] = useState([]);
-    const [editImageFiles, setEditImageFiles] = useState([]);
-    const [editModalVisible, setEditModalVisible] = useState(false);
-    const [editingPost, setEditingPost] = useState(null);
-    const [editForm] = Form.useForm();
-    const [fileList, setFileList] = useState([]);
-    const [uploading, setUploading] = useState(false);
     const [commentModalVisible, setCommentModalVisible] = useState(false);
     const [comments, setComments] = useState({});
     const [commentUsers, setCoomentUsers] = useState({});
-    const [postToDelete, setPostToDelete] = useState(null);
-    const [showmodalTODelete, setShowModalTODelete] = useState(false);
     const [selectedComment, setSelectedComment] = useState(null);
     const [commentText, setCommentText] = useState('');
     const [currentPostIdForComment, setCurrentPostIdForComment] = useState('');
-    const [coverImageModalVisible, setCoverImageModalVisible] = useState(false);
-    const [coverImageFile, setCoverImageFile] = useState(null);
-    const [fileUpload, setFileUpload] = useState(false);
-    const [editProfileModalShow, setEditProfileModalShow] = useState(false)
-    const [profileImageModalVisible, setProfileImageModalVisible] = useState(false);
-    const [profileImageFile, setProfileImageFile] = useState(null)
 
     const fetchUserProfile = async () => {
         try {
@@ -115,103 +99,6 @@ const OtherUserProfile = () => {
         setCurrentImageIndex(0);
     };
 
-
-    const postMenu = (post) => (
-        <Menu >
-            <Menu.Item key="edit" onClick={() => handleEditPost(post)}>
-                <EditFilled /> Edit
-            </Menu.Item>
-            <Menu.Item key="delete" onClick={() => showDeleteConfirm(post)}>
-                <DeleteOutlined /> Delete
-            </Menu.Item>
-        </Menu>
-    );
-
-    const handleEditPost = (post) => {
-        setEditingPost(post);
-        editForm.setFieldsValue({
-            caption: post.caption,
-        });
-
-        const initialFileList = post.imageUrls.map((url, index) => ({
-            uid: `edit-${index}`,
-            name: `image-${index}`,
-            status: 'done',
-            url: `http://localhost:4000/api/v1/${url}`,
-        }));
-        console.log('Initial file list:', initialFileList);
-        setEditImageFiles(initialFileList);
-        setEditModalVisible(true);
-    };
-
-    const handleCancelEditModal = () => {
-        setEditModalVisible(false);
-        setEditingPost(null);
-        setFileList([]);
-        editForm.resetFields();
-    };
-
-    const showDeleteConfirm = (post) => {
-        setPostToDelete(post);
-        setShowModalTODelete(true);
-    }
-
-    const handleDeletePost = async (post) => {
-        try {
-            await PostController.deletePost(post.id);
-            message.success('Post deleted successfully');
-            setShowModalTODelete(false);
-            setPostToDelete(null);
-            fetchPosts();
-        } catch (error) {
-            console.error('Error deleting post:', error);
-            message.error('Failed to delete post');
-        }
-    }
-
-
-    const handleEditFormFinish = async (values) => {
-        try {
-            setUploading(true);
-            const formData = new FormData();
-            formData.append('caption', values.caption);
-            formData.append('postId', editingPost.id);
-
-            editImageFiles.forEach((file) => {
-                if (file.originFileObj) {
-                    formData.append('imageFiles', file.originFileObj);
-                }
-            });
-
-            console.log('Form data:', formData.get('imageFiles'));
-            const response = await PostController.updatePost(formData);
-            console.log('Post updated:', response);
-            message.success('Post updated successfully');
-            setEditModalVisible(false);
-            setEditingPost(null);
-            setFileList([]);
-            editForm.resetFields();
-            fetchPosts();
-        } catch (error) {
-            console.error('Error updating post:', error);
-            message.error('Failed to update post.');
-        } finally {
-            setUploading(false);
-        }
-    };
-
-    const handleEditFileUploadChange = (info) => {
-        const newEditImageFiles = info.fileList.map(file => {
-            if (file.originFileObj) {
-                return {
-                    ...file,
-                    originFileObj: file.originFileObj
-                };
-            }
-            return file; // Keep existing URLs
-        });
-        setEditImageFiles(newEditImageFiles);
-    };
 
     const handleLike = async (postId) => {
         try {
@@ -289,61 +176,6 @@ const OtherUserProfile = () => {
         }
     };
 
-    const showCoverImageModal = () => {
-        setCoverImageModalVisible(true);
-    };
-
-    const handleCoverImageChange = (info) => {
-        if (info.fileList.length > 0) {
-            const file = info.fileList[0].originFileObj;
-            setCoverImageFile(file);
-            console.log({ "coverImage": file });
-        } else {
-            setCoverImageFile(null);
-        }
-    };
-
-    const handleAddCoverImage = async () => {
-        setFileUpload(true);
-        const formData = new FormData();
-        if (coverImageFile) {
-            formData.append("coverImage", coverImageFile); // Matches your backend @RequestParam
-        } else {
-            message.error("Please select a cover image.");
-            setFileUpload(false);
-            return;
-        }
-
-        console.log({ "formData Profile Image": formData.get("coverImage") });
-        console.log(userId)
-
-        try {
-            const response = await UserService.uploadCoverImage(userId, formData); 
-            if (response) {
-                console.log(response);
-                message.success("Cover Image Uploaded Successfully.");
-                fetchUserProfile();
-            } else {
-                message.error('Image Upload Failed.');
-            }
-        } catch (error) {
-            console.error('error while uploading cover image.', error);
-            message.error('Image Upload Failed.');
-        } finally {
-            setFileUpload(false);
-            setCoverImageModalVisible(false);
-            setCoverImageFile(null);
-        }
-    };
-
-    const handleCancelCoverImageUpload = () => {
-        setCoverImageModalVisible(false);
-        setProfileImageModalVisible(false)
-        setFileUpload(false);
-        setCoverImageFile(null);
-        setProfileImageFile(null)
-    };
-
     const commentMenu = (commentId, commentString) => (
         <Menu>
             <Menu.Item key="edit" onClick={() => handleEditComment(commentId, commentString)}>
@@ -362,90 +194,6 @@ const OtherUserProfile = () => {
         </Menu>
     );
 
-    const handleCanceleditProfile = () => {
-        setEditProfileModalShow(false)
-        editProfileForm.resetFields()
-
-    }
-
-    const handleShowProfileEditModal = () => {
-        editProfileForm.setFieldsValue({
-            name: user.name,
-            occupation: user.occupation,
-            address: user.address
-        })
-        setEditProfileModalShow(true)
-    }
-
-    const handleEditProfile = async (Data) => {
-        const formData = new FormData()
-        if(Data){
-            formData.append('userId', userId)
-            formData.append('name', Data.name)
-            formData.append('occupation', Data.occupation)
-            formData.append('address', Data.address)
-        }
-        try {
-            const response = await UserService.updateUserProfile(formData)
-            console.log(response)
-            message.success('User Details Update Successfuly.')
-            editProfileForm.resetFields()
-            setEditProfileModalShow(false)
-            fetchUserProfile()
-        } catch (error) {
-            console.log('error while updating profile details', error)
-            message.error('Profile details update failed')
-        }
-    }
-
-    const handleprofileImageModalVisible = ()=> {
-            setProfileImageModalVisible(true)
-    }
-
-    const handleProfileImageChange = (info) => {
-        if (info.fileList.length > 0) {
-            const file = info.fileList[0].originFileObj;
-            setProfileImageFile(file);
-            console.log({ "Profile Image": file });
-        } else {
-            setProfileImageFile(null);
-        }
-    };
-
-    const handleAddProfileImage = async () => {
-        setFileUpload(true);
-        const formData = new FormData();
-        if (profileImageFile) {
-            formData.append("profileImage", profileImageFile); // Matches your backend @RequestParam
-        } else {
-            message.error("Please select a cover image.");
-            setFileUpload(false);
-            return;
-        }
-
-        console.log({ "formData Profile Image": formData.get("profileImage") });
-        console.log(userId)
-
-        try {
-            const response = await UserService.uploadProfileImage(userId, formData); 
-            if (response) {
-                console.log(response);
-                message.success("Profile Image Uploaded Successfully.");
-                fetchUserProfile();
-            } else {
-                message.error('Image Upload Failed.');
-            }
-        } catch (error) {
-            console.error('error while uploading profile image.', error);
-            message.error('Image Upload Failed.');
-        } finally {
-            setFileUpload(false);
-            setProfileImageModalVisible(false);
-            setProfileImageFile(null);
-        }
-    };
-
-
 
     return (
         <div className='bg-slate-200 shadow-lg overflow-x-hidden'>
@@ -458,7 +206,6 @@ const OtherUserProfile = () => {
                     backgroundSize: 'cover',
                     backgroundImage: user.coverImg ? `url("http://localhost:4000/api/v1/${user.coverImg}")` : 'none',
                 }}>
-                    <Button className='absolute top-[210px] right-4 font-semibold' onClick={showCoverImageModal}><CameraFilled />Edit Cover Image</Button>
                 </div>
                 <Avatar
                     style={{
@@ -467,21 +214,18 @@ const OtherUserProfile = () => {
                     size={160} src={`http://localhost:4000/api/v1/${user.profileImg}`}
                     className='absolute top-40 left-10'
                 />
-                <Button className='absolute left-40 top-44 rounded-full w-10 h-10 p-3' onClick={handleprofileImageModalVisible}><CameraFilled className='text-xl' /></Button>
                 <div className='absolute w-full top-[310px] left-12 mt-4'>
                     <h1 className='font-bold text-3xl mb-1'>{user.name}</h1>
                     <h1 className='font-normal mb-1'>{user.occupation}</h1>
                     <h1 className='font-normal mb-1'>{user.address}</h1>
-                    <Button className='absolute right-16 top-14 font-semibold mr-1' onClick={() => { handleShowProfileEditModal() }}><EditFilled />Edit Profile</Button>
                 </div>
             </div>
 
             <div className=' w-[auto] h-auto flex flex-row mx-10 mt-10 gap-10'>
                 <ProfileCard />
                 <div className='w-[620px] h-auto'>
-                    <CreatePost />
                     {posts.map((post) => (
-                        <div key={post.id} className=" w-[auto] mt-5 mb-5 rounded-lg shadow-md bg-white p-4">
+                        <div key={post.id} className=" w-[auto] mb-5 rounded-lg shadow-md bg-white p-4">
                             <div className="flex justify-between items-center pb-3">
                                 <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(`/userProfile/${userId}`)}>
                                     <Avatar size={48} src={`http://localhost:4000/api/v1/${user.profileImg}`} />
@@ -490,9 +234,7 @@ const OtherUserProfile = () => {
                                         <p className="my-0 mx-0 text-xs text-gray-500">{user.occupation}</p>
                                     </div>
                                 </div>
-                                <Dropdown overlay={postMenu(post)} trigger={['click']}>
                                     <EllipsisOutlined className="text-2xl cursor-pointer" />
-                                </Dropdown>
                             </div>
                             <div className="pb-4">
                                 <p className="text-sm font-normal text-slate-900">{post.caption}</p>
@@ -576,60 +318,6 @@ const OtherUserProfile = () => {
             </Modal>
 
             <Modal
-                title="Edit Post"
-                visible={editModalVisible}
-                onCancel={handleCancelEditModal}
-                footer={[
-                    <Button key="cancel" onClick={handleCancelEditModal}>
-                        Cancel
-                    </Button>,
-                    <Button key="submit" type="primary" loading={uploading} onClick={() => editForm.submit()}>
-                        {uploading ? 'Updating...' : 'Update Post'}
-                    </Button>,
-                ]}
-            >
-                {console.log('editImageFiles list:', editImageFiles)}
-                <Form
-                    form={editForm}
-                    layout="vertical"
-                    onFinish={handleEditFormFinish}
-                >
-                    <Form.Item
-                        name="caption"
-                        label="Caption"
-                    >
-                        <Input.TextArea rows={4} />
-                    </Form.Item>
-                    <Form.Item label="Images">
-                        <Upload
-                            listType="picture-card"
-                            fileList={editImageFiles.map(file => ({
-                                uid: file.uid,
-                                name: file.name,
-                                status: 'done',
-                                url: file.url || (file.originFileObj ? URL.createObjectURL(file.originFileObj) : undefined),
-                            }))}
-                            multiple
-                            onChange={handleEditFileUploadChange}
-                            beforeUpload={() => false}
-                            itemRender={(originNode, file) => (
-                                <React.Fragment>
-                                    {originNode}
-                                    <div className="ant-upload-list-item-actions">
-                                        <DeleteOutlined onClick={() => {
-                                            setEditImageFiles(prevFiles => prevFiles.filter(f => f.uid !== file.uid));
-                                        }} />
-                                    </div>
-                                </React.Fragment>
-                            )}
-                        >
-                            {fileList.length < 5 && '+ Upload'}
-                        </Upload>
-                    </Form.Item>
-                </Form>
-            </Modal>
-
-            <Modal
                 title="Comments"
                 visible={commentModalVisible}
                 onCancel={handleCancelCommentModal}
@@ -665,118 +353,6 @@ const OtherUserProfile = () => {
                         <Button type="primary" htmlType="submit">
                             {selectedComment ? 'Update Comment' : 'Add Comment'}
                         </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
-
-            <Modal
-                title="Confirm Delete"
-                visible={showmodalTODelete}
-                onCancel={() => setShowModalTODelete(false)}
-                footer={[
-                    <Button key="cancel" onClick={() => setShowModalTODelete(false)}>
-                        Cancel
-                    </Button>,
-                    <Button key="delete" type="primary" danger onClick={() => handleDeletePost(postToDelete)}>
-                        Delete
-                    </Button>,
-                ]}
-            >
-                <p>Are you sure you want to delete this post?</p>
-            </Modal>
-
-            <Modal
-                title="Upload Profile Image" // Changed title to be more accurate
-                open={coverImageModalVisible}
-                onCancel={handleCancelCoverImageUpload}
-                footer={[
-                    <Button key="cancel" onClick={handleCancelCoverImageUpload}>
-                        Cancel
-                    </Button>,
-                    <Button key="upload" type="primary" loading={fileUpload} onClick={handleAddCoverImage}>
-                        {fileUpload ? 'Uploading...' : 'Upload'}
-                    </Button>,
-                ]}
-            >
-                <Form layout="vertical">
-                    <Form.Item label="Profile Image"> {/* Changed label */}
-                        <Upload
-                            listType="picture-card"
-                            fileList={coverImageFile ? [
-                                {
-                                    uid: '1',
-                                    name: coverImageFile.name,
-                                    status: 'done',
-                                    url: URL.createObjectURL(coverImageFile),
-                                }
-                            ] : []}
-                            onChange={handleCoverImageChange}
-                            beforeUpload={() => false}
-                            maxCount={1} // Ensure only one image is uploaded
-                        >
-                            {coverImageFile ? null : <PlusOutlined />}
-                        </Upload>
-                        <p className="text-gray-500 text-sm mt-1">Upload your profile image here.</p> {/* Updated text */}
-                    </Form.Item>
-                </Form>
-            </Modal>
-
-            <Modal
-                title="Edit Profile Details"
-                open={editProfileModalShow}
-                onCancel={handleCanceleditProfile}
-                footer={null}
-            >
-                <Form form={editProfileForm} layout='vertical' onFinish={handleEditProfile}>
-                    <Form.Item label="Name" name="name">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label="Occupation" name="occupation" >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label="Address" name="address">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type='primary' htmlType='submit'>
-                            Update
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
-
-            <Modal
-                title="Upload Profile Image" // Changed title to be more accurate
-                open={profileImageModalVisible}
-                onCancel={handleCancelCoverImageUpload}
-                footer={[
-                    <Button key="cancel" onClick={handleCancelCoverImageUpload}>
-                        Cancel
-                    </Button>,
-                    <Button key="upload" type="primary" loading={fileUpload} onClick={handleAddProfileImage}>
-                        {fileUpload ? 'Uploading...' : 'Upload'}
-                    </Button>,
-                ]}
-            >
-                <Form layout="vertical">
-                    <Form.Item label="Profile Image"> {/* Changed label */}
-                        <Upload
-                            listType="picture-card"
-                            fileList={profileImageFile ? [
-                                {
-                                    uid: '1',
-                                    name: profileImageFile.name,
-                                    status: 'done',
-                                    url: URL.createObjectURL(profileImageFile),
-                                }
-                            ] : []}
-                            onChange={handleProfileImageChange}
-                            beforeUpload={() => false}
-                            maxCount={1} // Ensure only one image is uploaded
-                        >
-                            {profileImageFile ? null : <PlusOutlined />}
-                        </Upload>
-                        <p className="text-gray-500 text-sm mt-1">Upload your profile image here.</p> {/* Updated text */}
                     </Form.Item>
                 </Form>
             </Modal>

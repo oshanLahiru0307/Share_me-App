@@ -4,8 +4,10 @@ import { useSnapshot } from 'valtio'
 import { useState, useEffect } from 'react'
 import userState from '../State/UserState'
 import UserService from '../ServiceController/UserServices'
+import { useNavigate } from 'react-router-dom'
 
 const AllFriends = () => {
+    const navigate = useNavigate()
     const snap = useSnapshot(userState)
     const userId = snap.userId
     const [friends, setFriends] = useState([])
@@ -37,7 +39,9 @@ const AllFriends = () => {
                             <Avatar
                                 style={{
                                     border: '3px solid white',
+                                    cursor:'pointer'
                                 }}
+                                onClick={() => navigate(`/otherUserProfile/${friend.id}`)}
                                 size={64}
                                 src={`http://localhost:4000/api/v1/${friend.profileImg}`} // Assuming friend object has profileImg
                                 alt={friend.name} // Add alt text for accessibility
