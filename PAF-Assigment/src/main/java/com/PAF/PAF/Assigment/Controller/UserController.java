@@ -68,7 +68,10 @@ public class UserController {
     }
 
     @PatchMapping("/updateProfile")
-    public UserEntity updateUserProfile(@RequestParam(value = "userId") String userId,@RequestParam(value = "name") String name, @RequestParam(value = "occupation") String occupation, @RequestParam(value = "address") String address){
+    public UserEntity updateUserProfile(@RequestParam(value = "userId") String userId,
+                                        @RequestParam(value = "name") String name,
+                                        @RequestParam(value = "occupation") String occupation,
+                                        @RequestParam(value = "address") String address){
         UserEntity user = userService.getUserById(userId);
         if(user != null){
             user.setName(name);

@@ -49,11 +49,21 @@ class UserServices {
 
     static async updateUser(userData){
         try{
-            const response = await axios.put(`${API_URL}/updateUser`, userData);
+            const response = await axios.patch(`${API_URL}/updateUser`, userData);
             return response.data;
         }catch(error){
             console.error("Error updating user:", error);
             throw error;       
+        }
+    }
+
+    static async updateUserProfile(profileData){
+        try{
+            const response = await axios.patch(`${API_URL}/updateProfile`, profileData)
+            return response.data
+        }catch(error){
+            console.error("error updating profile data", error)
+            throw error
         }
     }
 

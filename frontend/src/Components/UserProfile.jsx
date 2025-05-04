@@ -363,10 +363,16 @@ const UserProfile = () => {
         setEditProfileModalShow(true)
     }
 
-    const handleEditProfile = async (formData) => {
-        console.log("Form Data:", formData);
+    const handleEditProfile = async (Data) => {
+        const formData = new FormData()
+        if(Data){
+            formData.append('userId', userId)
+            formData.append('name', Data.name)
+            formData.append('occupation', Data.occupation)
+            formData.append('address', Data.address)
+        }
         try {
-            const response = await UserService.updateUser(formData)
+            const response = await UserService.updateUserProfile(formData)
             console.log(response)
             message.success('User Details Update Successfuly.')
             editProfileForm.resetFields()
