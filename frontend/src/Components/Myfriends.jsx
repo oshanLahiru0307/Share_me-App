@@ -1,15 +1,12 @@
 import React from 'react'
 import { Avatar, Button, message } from 'antd'
-import { useSnapshot } from 'valtio'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import userState from '../State/UserState'
+
 import UserService from '../ServiceController/UserServices'
 
-const Myfriends = () => {
+const Myfriends = ({userId}) => {
     const navigate = useNavigate()
-    const snap = useSnapshot(userState)
-    const userId = snap.userId
     const [user, setUser] = useState({})
     const [friends, setFriends] = useState([])
 
@@ -38,6 +35,7 @@ const Myfriends = () => {
             const response = await UserService.followUnfollowUser(userId, friendId)
             if(response){
                 message.success(`You unfollow ${friendName}`)
+                fetchFriends()
             }
         }catch(error){
             console.log('error following user', error)
