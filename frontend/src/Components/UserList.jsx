@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, Button } from 'antd'
+import { Avatar, Button, message} from 'antd'
 import { useSnapshot } from 'valtio'
 import {useState, useEffect} from 'react'
 import UserState from '../State/UserState'
@@ -19,6 +19,19 @@ const UserList = () => {
         } catch (error) {
             console.error('Error fetching users:', error)
         } 
+    }
+
+    const handleFollowUser = async(friendId, friendName) => {
+        try{
+            const response = await UserServices.followUnfollowUser(userId, friendId)
+            if(response){
+                message.success(`You follow ${friendName}`)
+            }
+            fetchUsers()
+        }catch(error){
+            console.log('error following user', error)
+            message.error('Failed Add User')
+        }
     }
 
     useEffect(() => {
@@ -57,6 +70,7 @@ const UserList = () => {
                                 style={{
                                     width: '80px'
                                 }}
+                                onClick={()=>{handleFollowUser(user.id, user.name)}} 
                             >+ Follow</Button>
                         </div>
                     ))
