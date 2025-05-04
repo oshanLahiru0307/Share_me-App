@@ -73,7 +73,6 @@ const CreatePost = () => {
             message.error('Please enter a caption or upload images.');
             return;
         }
-
         setUploading(true);
         const formData = new FormData();
         formData.append('userId', userId);
@@ -90,7 +89,6 @@ const CreatePost = () => {
                 }
             });
         }
-
         try {
             const response = await PostService.createPost(formData);
             console.log('Post created successfully:', response);

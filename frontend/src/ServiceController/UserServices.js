@@ -93,7 +93,7 @@ class UserServices {
 
     static async uploadCoverImage(userId, formData){
         try{
-            const response = await axios.get(`${API_URL}/uploadCoverImage/${userId}`, formData, {
+            const response = await axios.post(`${API_URL}/uploadCoverImage/${userId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

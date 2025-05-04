@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Menu, Dropdown, Form, Input, Upload, message, Divider, Carousel, Modal, Popconfirm } from 'antd';
 import { CameraFilled, PlusOutlined, EditFilled, DeleteOutlined, EllipsisOutlined, HeartOutlined, CommentOutlined, HeartFilled } from '@ant-design/icons';
@@ -37,7 +37,7 @@ const UserProfile = () => {
     const [commentText, setCommentText] = useState('');
     const [currentPostIdForComment, setCurrentPostIdForComment] = useState('');
     const [coverImageModalVisible, setCoverImageModalVisible] = useState(false);
-    const [coverImageFile, setCoverImageFile] = useState([]);
+    const [coverImageFile, setCoverImageFile] = useState(null);
     const [fileUpload, setFileUpload] = useState(false);
     const [editProfileModalShow, setEditProfileModalShow] = useState(false)
 
@@ -288,40 +288,56 @@ const UserProfile = () => {
     };
 
     const showCoverImageModal = () => {
-        setCoverImageModalVisible(true)
-    }
-
-    const handleAddCoverImage = async () => {
-        setFileUpload(true)
-        const formData = new FormData()
-        formData.append("coverImage", coverImageFile[0]); // Ensure you're sending a File object
-        console.log({ "formData": formData.get("coverImage") })
-        try {
-            const response = await UserService.uploadCoverImage(userId, formData)
-            if (response) {
-                console.log(response)
-                message.success("Cover Image Uploaded Successfuly.")
-                fetchUserProfile();
-            } else {
-                message.error('Image Upload Failed.')
-            }
-        } catch (error) {
-            console.error('error while uploading cover image.', error)
-            message.error('Image Upload Failed.')
-        } finally {
-            setFileUpload(false);
-            setCoverImageModalVisible(false);
-        }
-    }
+        setCoverImageModalVisible(true);
+    };
 
     const handleCoverImageChange = (info) => {
         if (info.fileList.length > 0) {
-            const newImageFiles = info.fileList.map(file => file.originFileObj).filter(Boolean);
-            setCoverImageFile(newImageFiles);
-            console.log({ "coverImage": coverImageFile })
+            const file = info.fileList[0].originFileObj;
+            setCoverImageFile(file);
+            console.log({ "coverImage": file });
         } else {
-            setCoverImageFile([]);
+            setCoverImageFile(null);
         }
+    };
+
+    const handleAddCoverImage = async () => {
+        setFileUpload(true);
+        const formData = new FormData();
+        if (coverImageFile) {
+            formData.append("coverImage", coverImageFile); // Matches your backend @RequestParam
+        } else {
+            message.error("Please select a cover image.");
+            setFileUpload(false);
+            return;
+        }
+
+        console.log({ "formData Profile Image": formData.get("coverImage") });
+        console.log(userId)
+
+        try {
+            const response = await UserService.uploadCoverImage(userId, formData); 
+            if (response) {
+                console.log(response);
+                message.success("Cover Image Uploaded Successfully.");
+                fetchUserProfile();
+            } else {
+                message.error('Image Upload Failed.');
+            }
+        } catch (error) {
+            console.error('error while uploading cover image.', error);
+            message.error('Image Upload Failed.');
+        } finally {
+            setFileUpload(false);
+            setCoverImageModalVisible(false);
+            setCoverImageFile(null);
+        }
+    };
+
+    const handleCancelCoverImageUpload = () => {
+        setCoverImageModalVisible(false);
+        setFileUpload(false);
+        setCoverImageFile(null);
     };
 
     const commentMenu = (commentId, commentString) => (
@@ -341,12 +357,6 @@ const UserProfile = () => {
             </Menu.Item>
         </Menu>
     );
-
-    const handleCancelCoverImageUpload = () => {
-        setFileUpload(false)
-        setCoverImageModalVisible(false)
-        setCoverImageFile([])
-    }
 
     const handleCanceleditProfile = () => {
         setEditProfileModalShow(false)
@@ -624,39 +634,40 @@ const UserProfile = () => {
             </Modal>
 
             <Modal
-                title="Upload Cover Image"
+                title="Upload Profile Image" // Changed title to be more accurate
                 open={coverImageModalVisible}
                 onCancel={handleCancelCoverImageUpload}
                 footer={[
                     <Button key="cancel" onClick={handleCancelCoverImageUpload}>
                         Cancel
                     </Button>,
-                    <Button key="create" type="primary" loading={fileUpload} onClick={handleAddCoverImage}>
+                    <Button key="upload" type="primary" loading={fileUpload} onClick={handleAddCoverImage}>
                         {fileUpload ? 'Uploading...' : 'Upload'}
                     </Button>,
                 ]}
             >
                 <Form layout="vertical">
-                    <Form.Item label={null}>
+                    <Form.Item label="Profile Image"> {/* Changed label */}
                         <Upload
                             listType="picture-card"
-                            fileList={coverImageFile.map(file => ({
-                                uid: file.name,
-                                name: file.name,
-                                status: 'done',
-                                url: URL.createObjectURL(file),
-                            }))}
+                            fileList={coverImageFile ? [
+                                {
+                                    uid: '1',
+                                    name: coverImageFile.name,
+                                    status: 'done',
+                                    url: URL.createObjectURL(coverImageFile),
+                                }
+                            ] : []}
                             onChange={handleCoverImageChange}
-                            multiple
                             beforeUpload={() => false}
+                            maxCount={1} // Ensure only one image is uploaded
                         >
-                            {coverImageFile.length >= 1 ? null : <PlusOutlined />}
+                            {coverImageFile ? null : <PlusOutlined />}
                         </Upload>
-                        <p className="text-gray-500 text-sm mt-1">Upload Your Cover Image Here.</p>
+                        <p className="text-gray-500 text-sm mt-1">Upload your profile image here.</p> {/* Updated text */}
                     </Form.Item>
                 </Form>
             </Modal>
-
             <Modal
                 title="Edit Profile Details"
                 open={editProfileModalShow}
