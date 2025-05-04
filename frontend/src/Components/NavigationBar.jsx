@@ -1,8 +1,8 @@
 import React from 'react'
-import { Avatar, Input} from 'antd'
+import { Avatar, Dropdown, Input, Menu} from 'antd'
 import { Link } from 'react-router-dom'
 import logo from '../assets/airbnb_1724634.png'
-import { HomeFilled, UsergroupAddOutlined, MessageOutlined, BellOutlined, SlackOutlined, LaptopOutlined} from '@ant-design/icons'
+import { HomeFilled, UsergroupAddOutlined, MessageOutlined, BellOutlined, SlackOutlined, LaptopOutlined, LogoutOutlined, SettingOutlined} from '@ant-design/icons'
 import {useSnapshot} from 'valtio'
 import userState from '../State/UserState'
 import { useState, useEffect } from 'react'
@@ -25,6 +25,28 @@ const NavigationBar = () => {
       console.error('Error fetching user profile:', error)
     }
   }
+
+
+  const eventMenu = (event) => (
+    <Menu>
+      <Menu.Item key='logout' onClick={() => handleLogOutEvent(event)}>
+        <LogoutOutlined className='mr-2'/>LogOut
+      </Menu.Item>
+      <Menu.Item key='settings' onClick={() => showSettings(event)}>
+        <SettingOutlined className='mr-2'/>Settings
+      </Menu.Item>
+    </Menu>
+  );
+
+  const handleLogOutEvent = (event)=> {
+
+  }
+
+  const showSettings = (event)=> {
+
+  }
+
+
 
   useEffect(()=> {
     fetchUserProfile()
@@ -81,7 +103,9 @@ const NavigationBar = () => {
         </ul>
       </div>
       <div>
+        <Dropdown overlay={eventMenu()} trigger={['click']} placement='bottom'>
         <Avatar size={38} src={`http://localhost:4000/api/v1/${user.profileImg}`} />
+        </Dropdown>
       </div>
 
     </div>
