@@ -40,6 +40,8 @@ const UserProfile = () => {
     const [coverImageFile, setCoverImageFile] = useState(null);
     const [fileUpload, setFileUpload] = useState(false);
     const [editProfileModalShow, setEditProfileModalShow] = useState(false)
+    const [profileImageModalVisible, setProfileImageModalVisible] = useState(false);
+    const [profileImageFile, setProfileImageFile] = useState(null)
 
     const fetchUserProfile = async () => {
         try {
@@ -336,8 +338,10 @@ const UserProfile = () => {
 
     const handleCancelCoverImageUpload = () => {
         setCoverImageModalVisible(false);
+        setProfileImageModalVisible(false)
         setFileUpload(false);
         setCoverImageFile(null);
+        setProfileImageFile(null)
     };
 
     const commentMenu = (commentId, commentString) => (
@@ -394,6 +398,54 @@ const UserProfile = () => {
         }
     }
 
+    const handleprofileImageModalVisible = ()=> {
+            setProfileImageModalVisible(true)
+    }
+
+    const handleProfileImageChange = (info) => {
+        if (info.fileList.length > 0) {
+            const file = info.fileList[0].originFileObj;
+            setProfileImageFile(file);
+            console.log({ "Profile Image": file });
+        } else {
+            setProfileImageFile(null);
+        }
+    };
+
+    const handleAddProfileImage = async () => {
+        setFileUpload(true);
+        const formData = new FormData();
+        if (profileImageFile) {
+            formData.append("profileImage", profileImageFile); // Matches your backend @RequestParam
+        } else {
+            message.error("Please select a cover image.");
+            setFileUpload(false);
+            return;
+        }
+
+        console.log({ "formData Profile Image": formData.get("profileImage") });
+        console.log(userId)
+
+        try {
+            const response = await UserService.uploadProfileImage(userId, formData); 
+            if (response) {
+                console.log(response);
+                message.success("Profile Image Uploaded Successfully.");
+                fetchUserProfile();
+            } else {
+                message.error('Image Upload Failed.');
+            }
+        } catch (error) {
+            console.error('error while uploading profile image.', error);
+            message.error('Image Upload Failed.');
+        } finally {
+            setFileUpload(false);
+            setProfileImageModalVisible(false);
+            setProfileImageFile(null);
+        }
+    };
+
+
 
     return (
         <div className='bg-slate-200 shadow-lg overflow-x-hidden'>
@@ -415,7 +467,7 @@ const UserProfile = () => {
                     size={160} src={`http://localhost:4000/api/v1/${user.profileImg}`}
                     className='absolute top-40 left-10'
                 />
-                <Button className='absolute left-40 top-44 rounded-full w-10 h-10 p-3'><CameraFilled className='text-xl' /></Button>
+                <Button className='absolute left-40 top-44 rounded-full w-10 h-10 p-3' onClick={handleprofileImageModalVisible}><CameraFilled className='text-xl' /></Button>
                 <div className='absolute w-full top-[310px] left-12 mt-4'>
                     <h1 className='font-bold text-3xl mb-1'>{user.name}</h1>
                     <h1 className='font-normal mb-1'>{user.occupation}</h1>
@@ -668,6 +720,7 @@ const UserProfile = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
             <Modal
                 title="Edit Profile Details"
                 open={editProfileModalShow}
@@ -688,6 +741,42 @@ const UserProfile = () => {
                         <Button type='primary' htmlType='submit'>
                             Update
                         </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal
+                title="Upload Profile Image" // Changed title to be more accurate
+                open={profileImageModalVisible}
+                onCancel={handleCancelCoverImageUpload}
+                footer={[
+                    <Button key="cancel" onClick={handleCancelCoverImageUpload}>
+                        Cancel
+                    </Button>,
+                    <Button key="upload" type="primary" loading={fileUpload} onClick={handleAddProfileImage}>
+                        {fileUpload ? 'Uploading...' : 'Upload'}
+                    </Button>,
+                ]}
+            >
+                <Form layout="vertical">
+                    <Form.Item label="Profile Image"> {/* Changed label */}
+                        <Upload
+                            listType="picture-card"
+                            fileList={profileImageFile ? [
+                                {
+                                    uid: '1',
+                                    name: profileImageFile.name,
+                                    status: 'done',
+                                    url: URL.createObjectURL(profileImageFile),
+                                }
+                            ] : []}
+                            onChange={handleProfileImageChange}
+                            beforeUpload={() => false}
+                            maxCount={1} // Ensure only one image is uploaded
+                        >
+                            {profileImageFile ? null : <PlusOutlined />}
+                        </Upload>
+                        <p className="text-gray-500 text-sm mt-1">Upload your profile image here.</p> {/* Updated text */}
                     </Form.Item>
                 </Form>
             </Modal>
