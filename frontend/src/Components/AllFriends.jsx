@@ -1,15 +1,12 @@
 import React from 'react'
-import { Avatar, Button } from 'antd'
-import { useSnapshot } from 'valtio'
+import { Avatar, Button, message } from 'antd'
 import { useState, useEffect } from 'react'
-import userState from '../State/UserState'
 import UserService from '../ServiceController/UserServices'
+import { useNavigate } from 'react-router-dom'
 
-const AllFriends = () => {
-    const snap = useSnapshot(userState)
-    const userId = snap.userId
+const AllFriends = ({userId}) => {
+    const navigate = useNavigate()
     const [friends, setFriends] = useState([])
-
 
     const fetchNonFriends = async () => {
         try {
@@ -18,6 +15,19 @@ const AllFriends = () => {
             setFriends(nonFriendsData)
         } catch (error) {
             console.error('Error fetching friends:', error)
+        }
+    }
+
+    const handleFollowUser = async(friendId, friendName) => {
+        try{
+            const response = await UserService.followUnfollowUser(userId, friendId)
+            if(response){
+                message.success(`You follow ${friendName}`)
+            }
+            fetchNonFriends()
+        }catch(error){
+            console.log('error following user', error)
+            message.error('Failed Add User')
         }
     }
 
@@ -37,7 +47,9 @@ const AllFriends = () => {
                             <Avatar
                                 style={{
                                     border: '3px solid white',
+                                    cursor:'pointer'
                                 }}
+                                onClick={() => navigate(`/otherUserProfile/${friend.id}`)}
                                 size={64}
                                 src={`http://localhost:4000/api/v1/${friend.profileImg}`} // Assuming friend object has profileImg
                                 alt={friend.name} // Add alt text for accessibility
@@ -53,6 +65,7 @@ const AllFriends = () => {
                             style={{
                                 width: '80px'
                             }}
+                            onClick={()=>{handleFollowUser(friend.id, friend.name)}} 
                         >+ follow</Button>
                     </div>
                 ))
