@@ -51,7 +51,7 @@ import React, { useState, useEffect } from 'react';
   return (
    <div className=" w-[660px] mt-5 mb-5 rounded-lg shadow-md bg-white p-4">
     <div className="flex justify-between items-center pb-3">
-     <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(`/userProfile/${userId}`)}>
+     <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(`/otherUserProfile/${userId}`)}>
       <Avatar size={48} src={`http://localhost:4000/api/v1/${user.profileImg}`} />
       <div>
        <p className="my-0 mx-0 font-semibold">{user.name}</p>

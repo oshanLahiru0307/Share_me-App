@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Menu, Dropdown, Form, Input, Upload, message, Divider, Carousel, Modal, Popconfirm } from 'antd';
 import { CameraFilled, PlusOutlined, EditFilled, DeleteOutlined, EllipsisOutlined, HeartOutlined, CommentOutlined, HeartFilled } from '@ant-design/icons';
@@ -12,7 +12,7 @@ import NavigationBar from './NavigationBar';
 import CreatePost from './CreatePost';
 import LinksCard from './Links';
 
-const UserProfile = () => {
+const OtherUserProfile = () => {
     const [commentForm] = Form.useForm();
     const [editProfileForm] = Form.useForm();
     const userId = useParams().id;
@@ -785,4 +785,4 @@ const UserProfile = () => {
     );
 };
 
-export default UserProfile;
+export default OtherUserProfile;
