@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, Button } from 'antd'
+import { Avatar, Button, message } from 'antd'
 import { useSnapshot } from 'valtio'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -30,6 +30,18 @@ const Myfriends = () => {
             setFriends(friendsData)
         } catch (error) {
             console.error('Error fetching friends:', error)
+        }
+    }
+
+    const handleFollowUser = async(friendId, friendName) => {
+        try{
+            const response = await UserService.followUnfollowUser(userId, friendId)
+            if(response){
+                message.success(`You unfollow ${friendName}`)
+            }
+        }catch(error){
+            console.log('error following user', error)
+            message.error('Failed Add User')
         }
     }
 
@@ -67,7 +79,8 @@ const Myfriends = () => {
                                 danger
                                 style={{
                                     width: '80px'
-                                }}>Unfollow</Button>
+                                }}
+                                onClick={()=>{handleFollowUser(friend.id, friend.name)}}>Unfollow</Button>
                         </div>
                     ))
                 ) : (
