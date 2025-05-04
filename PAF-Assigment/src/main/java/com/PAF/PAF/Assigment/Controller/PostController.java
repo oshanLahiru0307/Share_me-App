@@ -30,6 +30,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+
     @GetMapping("/getAllPosts")
     public List<PostEntity> getAllPosts(){
         return postService.getPosts();
