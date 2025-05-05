@@ -37,7 +37,6 @@
 
 ![friends](./IMAGES/React%20App%20-%20Google%20Chrome%205_5_2025%208_27_03%20AM.png)
 
-> 📁 **Note**: Place your images in `assets/screenshots/` relative to `README.md`.
 
 ## 🧰 Tech Stack
 
@@ -46,19 +45,27 @@
 - React JS
 - Axios
 - React Router
-- Ant Design or Material UI
+- Ant Design abd Tailwind css
 
 ### 🔙 Backend
 
 - Spring Boot (Java)
 - Spring Security + JWT
 - Spring Data JPA (Hibernate)
-- MySQL or PostgreSQL
+- MongoDB
 - RESTful APIs
 
 ### 🗄️ Storage
 
-- Image Upload: Local server storage or cloud (e.g., Cloudinary, S3)
+- Image Upload: Local server storage
 
 ## 📁 Project Structure
-
+socialsphere/
+├── client/ # React frontend
+│ ├── public/
+│ └── src/
+├── server/ # Spring Boot backend
+│ ├── src/main/java/
+│ └── src/main/resources/
+├── assets/screenshots/ # Screenshots for README
+├── README.md
