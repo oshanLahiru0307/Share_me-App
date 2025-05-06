@@ -49,11 +49,21 @@ class UserServices {
 
     static async updateUser(userData){
         try{
-            const response = await axios.put(`${API_URL}/updateUser`, userData);
+            const response = await axios.patch(`${API_URL}/updateUser`, userData);
             return response.data;
         }catch(error){
             console.error("Error updating user:", error);
             throw error;       
+        }
+    }
+
+    static async updateUserProfile(profileData){
+        try{
+            const response = await axios.patch(`${API_URL}/updateProfile`, profileData)
+            return response.data
+        }catch(error){
+            console.error("error updating profile data", error)
+            throw error
         }
     }
 
@@ -69,7 +79,7 @@ class UserServices {
 
     static async uploadProfileImage(userId, formData){
         try{
-            const response = await axios.get(`${API_URL}/uploadProfileImage/${userId}`, formData, {
+            const response = await axios.post(`${API_URL}/uploadProfileImage/${userId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -83,7 +93,7 @@ class UserServices {
 
     static async uploadCoverImage(userId, formData){
         try{
-            const response = await axios.get(`${API_URL}/uploadProfileImage/${userId}`, formData, {
+            const response = await axios.post(`${API_URL}/uploadCoverImage/${userId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

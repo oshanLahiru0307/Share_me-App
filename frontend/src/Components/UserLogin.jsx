@@ -25,9 +25,9 @@ const UserLogin = () => {
         state.userId = response.id;
         localStorage.setItem("user", JSON.stringify(state.userId));
         message.success("Login successful!");
-        navigate("/"); 
+        navigate("/home"); 
       } else {
-        message.error("Login failed. Please check your credentials.");
+        message.error("Login failed. Please check your credentials....");
       }
     } catch (error) {
       console.error("Login error:", error);

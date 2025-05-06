@@ -91,6 +91,28 @@ class PostController {
         }
     }
 
+    static async deleteComment(postId,userId){
+        try{
+            const response = await axios.delete(`${BASE_URL}/${postId}/deleteComment/${userId}`)
+            return response.data
+        }catch(error){
+            console.error("error while deleting comment", error)
+            throw error
+        }
+    }
+
+    static async updateCommentPost(postId, userId, commentData) {
+        try {
+            const response = await axios.post(`${BASE_URL}/${postId}/editComment/${userId}`, commentData)
+            return response.data
+        } catch (error) {
+            console.error('Error commenting on post:', error)
+            throw error
+        }
+    }
+
+    
+
 }
 
 export default PostController

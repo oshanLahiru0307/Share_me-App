@@ -21,10 +21,8 @@ public class SecurityConfig {
                                 "/register",
                                 "/login",
                                 "/api/auth/**",
-                                "/api/auth/**",
                                 "/oauth2/**",
                                 "/login/oauth2/**",
-                                "/learningPlan/**",
                                 "/api/**"
                         ).permitAll() // Public endpoints
                         .anyRequest().authenticated()

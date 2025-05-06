@@ -29,7 +29,7 @@ function UpdateLearningPost() {
     const fetchPost = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/learningPlan/${id}`
+          `http://localhost:4000/api/v1/learningPlan/${id}`
         );
         const {
           title,
@@ -112,7 +112,7 @@ function UpdateLearningPost() {
       formData.append("file", image);
       try {
         const uploadResponse = await axios.post(
-          "http://localhost:4000/learningPlan/planUpload",
+          "http://localhost:4000/api/v1/learningPlan/planUpload",
           formData,
           {
             headers: {
@@ -142,7 +142,7 @@ function UpdateLearningPost() {
       category,
     };
     try {
-      await axios.put(`http://localhost:4000/learningPlan/${id}`, updatedPost);
+      await axios.put(`http://localhost:4000/api/v1/learningPlan/${id}`, updatedPost);
       alert("Post updated successfully!");
       window.location.href = "/lerning";
     } catch (error) {
@@ -204,7 +204,7 @@ function UpdateLearningPost() {
               ) : (
                 existingImage && (
                   <img
-                    src={`http://localhost:4000/learningPlan/planImages/${existingImage}`}
+                    src={`http://localhost:4000/api/v1/learningPlan/planImages/${existingImage}`}
                     alt="Existing"
                     className="w-full h-40 object-cover rounded-lg mt-2 shadow"
                   />
@@ -257,7 +257,7 @@ function UpdateLearningPost() {
                   existingImage && (
                     <div className="mb-4">
                       <img
-                        src={`http://localhost:4000/learningPlan/planImages/${existingImage}`}
+                        src={`http://localhost:4000/api/v1/learningPlan/planImages/${existingImage}`}
                         alt="Existing"
                         className="w-full rounded-xl shadow"
                       />

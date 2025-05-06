@@ -1,13 +1,12 @@
 import React from 'react'
-import { Avatar, Button } from 'antd'
-import { useSnapshot } from 'valtio'
+import { Avatar, Button, message } from 'antd'
 import { useState, useEffect } from 'react'
-import userState from '../State/UserState'
+import { useNavigate } from 'react-router-dom'
+
 import UserService from '../ServiceController/UserServices'
 
-const Myfriends = () => {
-    const snap = useSnapshot(userState)
-    const userId = snap.userId
+const Myfriends = ({userId}) => {
+    const navigate = useNavigate()
     const [user, setUser] = useState({})
     const [friends, setFriends] = useState([])
 
@@ -31,6 +30,19 @@ const Myfriends = () => {
         }
     }
 
+    const handleFollowUser = async(friendId, friendName) => {
+        try{
+            const response = await UserService.followUnfollowUser(userId, friendId)
+            if(response){
+                message.success(`You unfollow ${friendName}`)
+                fetchFriends()
+            }
+        }catch(error){
+            console.log('error following user', error)
+            message.error('Failed Add User')
+        }
+    }
+
     useEffect(() => {
         fetchUserProfile()
         fetchFriends()
@@ -46,9 +58,10 @@ const Myfriends = () => {
                             className='w-[1000px] bg-white rounded-lg border-2 border-blue-100 p-4 my-5 flex flex-row gap-10 items-center justify-between hover:shadow-md transition-shadow duration-300 ease-in-out'
                         >
                             <div className='flex flex-row gap-2 items-center' >
-                                <Avatar
+                                <Avatar onClick={() => navigate(`/otherUserProfile/${friend.id}`)}
                                     style={{
                                         border: '3px solid white',
+                                        cursor:'pointer'
                                     }}
                                     size={48}
                                     src={`http://localhost:4000/api/v1/${friend.profileImg}`} // Assuming your friend object has a profileImg property
@@ -64,7 +77,8 @@ const Myfriends = () => {
                                 danger
                                 style={{
                                     width: '80px'
-                                }}>Unfollow</Button>
+                                }}
+                                onClick={()=>{handleFollowUser(friend.id, friend.name)}}>Unfollow</Button>
                         </div>
                     ))
                 ) : (

@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin()
+@RequestMapping(value="/api/v1")
 public class LearningPlanController {
 
     private static final Path UPLOAD_DIRECTORY = Paths.get("uploads/plan");

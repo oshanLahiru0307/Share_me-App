@@ -70,7 +70,7 @@ function AddLearningPlan() {
         const formData = new FormData();
         formData.append("file", image);
         const uploadResponse = await axios.post(
-          "http://localhost:4000/learningPlan/planUpload",
+          "http://localhost:4000/api/v1/learningPlan/planUpload",
           formData,
           {
             headers: {
@@ -97,7 +97,7 @@ function AddLearningPlan() {
       };
 
       // Submit the post data
-      await axios.post("http://localhost:4000/learningPlan", newPost);
+      await axios.post("http://localhost:4000/api/v1/learningPlan", newPost);
       alert("Post added successfully!");
       navigate("/lerning");
     } catch (error) {

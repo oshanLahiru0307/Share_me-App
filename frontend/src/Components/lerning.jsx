@@ -69,7 +69,7 @@ function renderPostTailwind(
       </div>
       {post.imageUrl && (
         <img
-          src={`http://localhost:4000/learningPlan/planImages/${post.imageUrl}`}
+          src={`http://localhost:4000/api/v1/learningPlan/planImages/${post.imageUrl}`}
           alt={post.title}
           className="w-full h-40 object-cover rounded-lg mt-2 shadow"
         />
@@ -108,7 +108,7 @@ function Lerning() {
     }
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/learningPlan");
+        const response = await axios.get("http://localhost:4000/api/v1/learningPlan");
         // Only show posts belonging to the logged-in user or userId param
         const userPosts = response.data.filter(
           (post) => String(post.postOwnerID) === String(userId)
@@ -145,7 +145,7 @@ function Lerning() {
     );
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:4000/learningPlan/${id}`);
+        await axios.delete(`http://localhost:4000/api/v1/learningPlan/${id}`);
         alert("Post deleted successfully!");
         setFilteredPosts(filteredPosts.filter((post) => post.id !== id));
       } catch (error) {
