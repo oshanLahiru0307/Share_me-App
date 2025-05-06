@@ -18,7 +18,7 @@ function AddLearningPlan() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showContentURLInput, setShowContentURLInput] = useState(false);
   const [showImageUploadInput, setShowImageUploadInput] = useState(false);
-  const [templateID, setTemplateID] = useState(""); // was null
+  const [templateID] = useState("1"); // always "1", no select shown
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [category, setCategory] = useState("");
@@ -60,12 +60,6 @@ function AddLearningPlan() {
 
     if (tags.length < 2) {
       alert("Please add at least two tags.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!templateID) {
-      alert("Please select a template.");
       setIsSubmitting(false);
       return;
     }
@@ -256,21 +250,8 @@ function AddLearningPlan() {
                     className="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50"
                   />
                 </div>
-                {/* Template */}
-                <div>
-                  <label className="block text-gray-700 font-semibold mb-2">
-                    Select Your Template
-                  </label>
-                  <select
-                    value={templateID}
-                    onChange={(e) => setTemplateID(e.target.value)}
-                    required
-                    className="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50"
-                  >
-                    <option value="">Select Template</option>
-                    <option value="1">Default Template</option>
-                  </select>
-                </div>
+                {/* Template - removed select, just hidden input */}
+                <input type="hidden" value={templateID} />
                 {/* Start and End Dates */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -380,7 +361,7 @@ function AddLearningPlan() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-40 mx-auto py-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg   text-base flex justify-center"
+                  className="w-40 mx-auto py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg text-base flex justify-center"
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </button>

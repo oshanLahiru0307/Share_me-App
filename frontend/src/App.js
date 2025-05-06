@@ -9,7 +9,6 @@ import UserRegister from "./Components/UserRegister";
 import Lerning from "./Components/lerning";
 import AddLearningPlan from "./Components/AddLearningPlan";
 import UpdateLearningPlan from "./Components/UpdateLearningPlan";
-import NotificationsPage from "./Components/NotificationsPage";
 
 
 function App() {
@@ -26,7 +25,6 @@ function App() {
           <Route path="/lerning" element={<Lerning />} />
           <Route path="/addLearningPlan" element={<AddLearningPlan />} />
           <Route path="/updateLearningPlan/:id" element={<UpdateLearningPlan />} />
-          <Route path="/notificationsPage" element={<NotificationsPage />} />
         </Routes>
       </Router>
     </div>

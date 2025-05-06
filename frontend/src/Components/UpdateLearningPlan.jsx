@@ -16,7 +16,7 @@ function UpdateLearningPost() {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [existingImage, setExistingImage] = useState("");
-  const [templateID, setTemplateID] = useState(null);
+  const [templateID] = useState(1); // always 1, no select shown
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [category, setCategory] = useState("");
@@ -37,7 +37,7 @@ function UpdateLearningPost() {
           contentURL,
           tags,
           imageUrl,
-          templateID,
+          /* templateID, */ // don't set from backend, always 1
           startDate,
           endDate,
           category,
@@ -48,7 +48,7 @@ function UpdateLearningPost() {
         setContentURL(contentURL);
         setTags(tags);
         setExistingImage(imageUrl);
-        setTemplateID(templateID);
+        // setTemplateID(templateID); // removed
         setStartDate(startDate);
         setEndDate(endDate);
         setCategory(category);
@@ -331,21 +331,8 @@ function UpdateLearningPost() {
                   className="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50"
                 />
               </div>
-              {/* Template */}
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Select Your Template
-                </label>
-                <select
-                  value={templateID || ""}
-                  onChange={(e) => setTemplateID(Number(e.target.value))}
-                  required
-                  className="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50"
-                >
-                  <option value="">Select Template</option>
-                  <option value="1">Default Template</option>
-                </select>
-              </div>
+              {/* Template - removed select, just hidden input */}
+              <input type="hidden" value={templateID} />
               {/* Start and End Dates */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -396,7 +383,7 @@ function UpdateLearningPost() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-40 mx-auto py-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg text-base flex justify-center"
+                className="w-40 mx-auto py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg text-base flex justify-center"
               >
                 Submit
               </button>
