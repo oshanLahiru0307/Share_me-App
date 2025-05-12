@@ -38,7 +38,7 @@ const UserLogin = () => {
   }
 
   const handleGooglelogin = async () => {
-
+    window.location.href = 'http://localhost:4000/oauth2/authorization/google'
   }
 
   return (

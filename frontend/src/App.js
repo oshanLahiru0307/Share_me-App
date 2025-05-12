@@ -10,6 +10,9 @@ import OtherUserProfile from "./Components/OtherUserProfile";
 
 
 function App() {
+
+
+
   return (
     <div className="App">
       <Router>
