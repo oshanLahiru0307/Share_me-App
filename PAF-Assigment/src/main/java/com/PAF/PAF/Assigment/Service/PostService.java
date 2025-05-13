@@ -1,6 +1,7 @@
 package com.PAF.PAF.Assigment.Service;
 
 import com.PAF.PAF.Assigment.Entity.PostEntity;
+import com.PAF.PAF.Assigment.Entity.UserEntity;
 import com.PAF.PAF.Assigment.Repository.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,12 @@ public class PostService {
 
     @Autowired
     private PostRepo postRepo;
+
+    @Autowired
+    private NotificationServices notificationServices;
+
+    @Autowired
+    private UserService userService;
 
     public PostEntity createPost(PostEntity post){
         return postRepo.save(post);
@@ -47,12 +54,17 @@ public class PostService {
 
     public PostEntity likeOrDislikePost(String postId, String userId) {
         PostEntity post = postRepo.findById(postId).orElse(null);
+        String  postUserId = post.getUserId();
         if (post != null) {
             if (post.getLikes() == null) {
                 post.setLikes(new HashMap<>());
             }
             if (!post.getLikes().containsKey(userId)) {
                 post.getLikes().put(userId, true);
+                UserEntity user = userService.getUserById(userId);
+                String name = user.getName();
+                String message = name + " liked your post";
+                notificationServices.CreatNotification(postUserId, userId, message);
             }else{
                 post.getLikes().remove(userId);
             }
@@ -69,6 +81,11 @@ public class PostService {
             }
             post.getComments().put(userId, commentText);
             postRepo.save(post);
+            String postUserId = post.getUserId();
+            UserEntity user = userService.getUserById(userId);
+            String name = user.getName();
+            String message = name + " commented on your post";
+            notificationServices.CreatNotification(postUserId, userId, message);
         }
         return post;
     }

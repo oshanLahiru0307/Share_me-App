@@ -14,18 +14,18 @@ public class NotificationController {
    @Autowired
     private NotificationServices notificationService;
 
-   @GetMapping("/getUsersAllNotifications")
-    public List<NotificationEntity> getAllNotifications(String userId) {
+   @GetMapping("/getUsersAllNotifications/{userId}")
+    public List<NotificationEntity> getAllNotifications(@PathVariable String userId) {
         return notificationService.getNotificationById(userId);
     }
 
     @PatchMapping("/marksAsRead/{Id}")
-    public NotificationEntity marksAsRead(@RequestParam String Id) {
+    public NotificationEntity marksAsRead(@PathVariable String Id) {
         return notificationService.markAsRead(Id);
     }
 
     @DeleteMapping("/deleteNotification/{Id}")
-    public String deleteNotification(@RequestParam String Id) {
+    public String deleteNotification(@PathVariable String Id) {
         return notificationService.deleteNotification(Id);
     }
 
