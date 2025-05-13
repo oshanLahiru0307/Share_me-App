@@ -38,7 +38,14 @@ public class NotificationServices {
         return notifications;
     }
 
-
+    public String deleteNotification(String id) {
+        NotificationEntity notification = notificationRepo.findById(id).orElse(null);
+        if (notification != null) {
+            notificationRepo.delete(notification);
+            return "Notification deleted successfully";
+        }
+        return "Notification not found";
+    }
 
 
 }
