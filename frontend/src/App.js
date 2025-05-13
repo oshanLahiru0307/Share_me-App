@@ -7,6 +7,7 @@ import Event from "./Components/Event";
 import UserLogin from "./Components/UserLogin";
 import UserRegister from "./Components/UserRegister";
 import OtherUserProfile from "./Components/OtherUserProfile";
+import Notification from "./Components/Notification";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/otherUserProfile/:id" element={<OtherUserProfile />} />
           <Route path="/myNetwork" element={<MyNetwork />} />
           <Route path="/events" element={<Event />} />
+          <Route path="/notification" element={<Notification />} />
           <Route path="/register" element={<UserRegister />} />
         </Routes>
       </Router>
