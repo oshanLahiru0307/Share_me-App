@@ -29,12 +29,6 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .defaultSuccessUrl("/oauth2/success", true)
-                )
-                .formLogin(form -> form
-                        .defaultSuccessUrl("/dashboard", true)
-                        .permitAll()
-                )
-                .logout(LogoutConfigurer::permitAll
                 );
 
         return http.build();
