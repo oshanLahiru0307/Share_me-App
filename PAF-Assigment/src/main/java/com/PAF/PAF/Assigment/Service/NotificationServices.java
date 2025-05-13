@@ -24,13 +24,17 @@ public class NotificationServices {
         return notificationRepo.save(notification);
     }
 
-    public NotificationEntity markAsRead(String id) {
-        NotificationEntity notification = notificationRepo.findById(id).orElse(null);
-        if (notification != null) {
-            notification.setRead(true);
-            return notificationRepo.save(notification);
+    public List<NotificationEntity> markAsRead(String id) {
+        List<NotificationEntity> notifications = notificationRepo.findByUserId(id);
+        if (notifications != null) {
+            for(NotificationEntity notification : notifications) {
+                if (!notification.getRead()) {
+                    notification.setRead(true);
+                    notificationRepo.save(notification);
+                }
+            }
         }
-        return null;
+        return notifications;
     }
 
     public List<NotificationEntity> getNotificationById(String id) {

@@ -20,7 +20,7 @@ public class NotificationController {
     }
 
     @PatchMapping("/marksAsRead/{Id}")
-    public NotificationEntity marksAsRead(@PathVariable String Id) {
+    public List<NotificationEntity> marksAsRead(@PathVariable String Id) {
         return notificationService.markAsRead(Id);
     }
 
