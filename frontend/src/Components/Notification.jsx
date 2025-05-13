@@ -3,6 +3,7 @@ import NavigationBar from './NavigationBar'
 import ProfileCard from './ProfileCard'
 import UserList from './UserList'
 
+
 const Notification = () => {
   return (
     <div >
@@ -11,6 +12,9 @@ const Notification = () => {
             <ProfileCard />
         <div className='w-[600px] bg-white rounded-lg shadow-lg p-4 sticky top-24'>
             <h1 className='text-blue-500 text-lg font-medium'>Notification</h1>
+            <div>
+
+            </div>
         </div>
           <div className="w-auto h-[570px] bg-white rounded-lg shadow-lg p-4 sticky top-24 ">
             <p className="text-blue-500 text-lg font-semibold pb-2">Add to your feed</p>
