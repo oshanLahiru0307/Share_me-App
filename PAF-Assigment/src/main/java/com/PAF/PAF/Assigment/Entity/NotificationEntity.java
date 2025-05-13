@@ -12,7 +12,7 @@ public class NotificationEntity {
     private String id;
     private String userId; // The user who owns this notification
     private String message; // Notification message
-    private boolean read; // Whether the notification has been read
+    private Boolean read; // Whether the notification has been read
     private String createdAt; // Timestamp of the notification
 
     public NotificationEntity() {}
