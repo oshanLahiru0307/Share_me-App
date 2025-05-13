@@ -17,7 +17,8 @@ public class NotificationEntity {
     private String userId;// The user who owns this notification
     private String commentedUser;
     private String message; // Notification message
-    private Boolean read; // Whether the notification has been read
+    private Boolean read;
+    private String createdAt;
 
     public String getUserId() {
         return userId;
@@ -57,5 +58,13 @@ public class NotificationEntity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -1,10 +1,12 @@
-const axios = require('axios');
+import axios from 'axios';
 const BASE_URI = 'http://localhost:4000/api/v1';
 
 class NotificationService {
+  
   static async getNotification(userId) {
     try {
       const response = await axios.get(`${BASE_URI}/getUsersAllNotifications/${userId}`);
+      console.log('Notification marked as read:', response.data); 
       return response.data;
     } catch (error) {
       console.error('Error fetching notifications:', error);
