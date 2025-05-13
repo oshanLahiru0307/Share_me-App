@@ -24,6 +24,9 @@ public class NotificationController {
         return notificationService.markAsRead(Id);
     }
 
-
+    @DeleteMapping("/deleteNotification/{Id}")
+    public String deleteNotification(@RequestParam String Id) {
+        return notificationService.deleteNotification(Id);
+    }
 
 }
