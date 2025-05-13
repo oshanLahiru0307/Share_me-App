@@ -19,6 +19,11 @@ public class NotificationController {
         return notificationService.getNotificationById(userId);
     }
 
+    @PatchMapping("/marksAsRead/{Id}")
+    public NotificationEntity marksAsRead(@RequestParam String Id) {
+        return notificationService.markAsRead(Id);
+    }
+
 
 
 }
