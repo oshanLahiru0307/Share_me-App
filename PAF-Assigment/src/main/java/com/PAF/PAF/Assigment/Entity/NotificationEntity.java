@@ -1,19 +1,23 @@
 package com.PAF.PAF.Assigment.Entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Document(collection = "notifications")
 public class NotificationEntity {
 
     @Id
     private String id;
-    private String userId; // The user who owns this notification
+    private String userId;// The user who owns this notification
+    private String commentedUser;
     private String message; // Notification message
     private Boolean read; // Whether the notification has been read
-    private String createdAt; // Timestamp of the notification
 
     public NotificationEntity() {}
 
@@ -21,7 +25,6 @@ public class NotificationEntity {
         this.userId = userId;
         this.message = message;
         this.read = read;
-        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -56,11 +59,4 @@ public class NotificationEntity {
         this.read = read;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
 }
