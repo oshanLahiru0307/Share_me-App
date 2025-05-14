@@ -81,6 +81,7 @@ class PostController {
         }
     }
 
+
     static async addCommentPost(postId, userId, commentData) {
         try {
             const response = await axios.post(`${BASE_URL}/${postId}/addComment/${userId}`, commentData)

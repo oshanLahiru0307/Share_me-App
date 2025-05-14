@@ -67,17 +67,23 @@ public class UserController {
         return userService.updateUser(user);
     }
 
-    @PatchMapping("/updateProfile")
+    @PatchMapping("/updateProfileDetails")
     public UserEntity updateUserProfile(@RequestParam(value = "userId") String userId,
                                         @RequestParam(value = "name") String name,
                                         @RequestParam(value = "occupation") String occupation,
                                         @RequestParam(value = "address") String address){
         UserEntity user = userService.getUserById(userId);
+        System.out.println(userId);
+        System.out.println(name);
+        System.out.println(occupation);
+        System.out.println(occupation);
         if(user != null){
             user.setName(name);
             user.setOccupation(occupation);
             user.setAddress(address);
         }
+        assert user != null;
+        System.out.println(user);
         return userService.updateUser(user);
     }
 

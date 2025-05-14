@@ -390,6 +390,7 @@ const UserProfile = () => {
     }
 
     const handleEditProfile = async (Data) => {
+        console.log('Data:', Data)
         const formData = new FormData()
         if(Data){
             formData.append('userId', userId)
@@ -397,6 +398,9 @@ const UserProfile = () => {
             formData.append('occupation', Data.occupation)
             formData.append('address', Data.address)
         }
+        
+        console.log('Form data:', formData.get('userId'), formData.get('name'), formData.get('occupation'), formData.get('address'))
+        
         try {
             const response = await UserService.updateUserProfile(formData)
             console.log(response)
@@ -739,7 +743,7 @@ const UserProfile = () => {
                 onCancel={handleCanceleditProfile}
                 footer={null}
             >
-                <Form form={editProfileForm} layout='vertical' onFinish={handleEditProfile}>
+                <Form form={editProfileForm} layout='vertical' onFinish={()=>handleEditProfile}>
                     <Form.Item label="Name" name="name">
                         <Input />
                     </Form.Item>
