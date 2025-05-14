@@ -48,7 +48,7 @@ const Notification = () => {
             <NavigationBar />
             <div className='flex flex-row justify-between mx-10 mt-10'>
                 <ProfileCard />
-                <div className='w-[600px] bg-white rounded-lg shadow-lg p-4 sticky top-24'>
+                <div className='w-[600px] h-auto bg-white rounded-lg shadow-lg p-4 sticky top-24'>
                     <div className='flex flex-row justify-between items-center'>
                         <h1 className='text-blue-500 text-lg font-medium'>Notification</h1>
                         <Dropdown
@@ -65,7 +65,7 @@ const Notification = () => {
                                     setIsDropdownOpen(!isDropdownOpen);
                                 }}
                             >
-                                <EllipsisOutlined className='cursor-pointer' />
+                                <EllipsisOutlined className='cursor-pointer font-medium' />
                             </Button>
                         </Dropdown>
                     </div>
@@ -74,7 +74,7 @@ const Notification = () => {
                             notifications.map((notification) => (
                                 <div key={notification._id} className='mt-2 bg-blue-200 flex flex-row gap-2 items-center border-2 rounded-md border-gray-200 p-2'>
                                     <div className=''>
-                                        <p className='text-sm text-black'>{notification.message}</p>
+                                        <p className='text-m text-black'>{notification.message}</p>
                                         <p className='text-xs text-gray-400'>{new Date(notification.createdAt).toLocaleString()}</p>
                                     </div>
                                 </div>

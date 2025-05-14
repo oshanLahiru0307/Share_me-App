@@ -11,6 +11,7 @@ import ProfileCard from './ProfileCard';
 import NavigationBar from './NavigationBar';
 import CreatePost from './CreatePost';
 import LinksCard from './Links';
+import state from '../State/UserState';
 
 const UserProfile = () => {
     const [commentForm] = Form.useForm();
@@ -43,8 +44,14 @@ const UserProfile = () => {
     const [profileImageModalVisible, setProfileImageModalVisible] = useState(false);
     const [profileImageFile, setProfileImageFile] = useState(null)
 
+
     const fetchUserProfile = async () => {
         try {
+            if (userId) {
+            state.userId = userId;
+            localStorage.setItem("user", JSON.stringify(userId));
+            console.log('User ID set in Valtio state:', localStorage.getItem("user"));
+        }
             const response = await UserService.getUserById(userId);
             console.log('User Profile:', response);
             setUser(response);
@@ -54,6 +61,7 @@ const UserProfile = () => {
     };
 
     const fetchPosts = async () => {
+
         try {
             const response = await PostController.getPostsByUserId(userId);
             console.log('Posts:', response);
@@ -63,6 +71,7 @@ const UserProfile = () => {
             setPosts([]);
         }
     };
+
 
     useEffect(() => {
         const fetchCommentUsers = async () => {
@@ -88,9 +97,12 @@ const UserProfile = () => {
         if (comments && Object.keys(comments).length > 0) {
             fetchCommentUsers();
         }
+
         fetchUserProfile();
         fetchPosts();
     }, [comments, userId]);
+
+
 
     const getCommentObject = (commentString) => {
         try {

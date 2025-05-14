@@ -131,7 +131,6 @@ public class UserController {
         } catch (MalformedURLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
     }
 
     @GetMapping("/nonFriends/{userId}")

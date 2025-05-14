@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Form, Button, Input, Typography, message, Row, Col } from "antd";
 import UserController from "../ServiceController/UserServices";
 import state from "../State/UserState";
@@ -9,11 +9,12 @@ import googleLogo from "../assets/glogo.png"
 
 const { Title, Text } = Typography;
 
-const UserLogin = () => {
+const UserLogin = () => {   
 
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+
 
   const handleSubmit = async (values) => {
     setLoading(true);

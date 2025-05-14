@@ -46,7 +46,7 @@ public class OAuthController {
 
         String redirectUrl = String.format(
                 "http://localhost:3000/oauth2/success?userID=%s&name=%s&googleProfileImage=%s",
-                user.getId().toString(),
+                user.getId(),
                 user.getName(),
                 encodedGoogleProfileImage // Use the encoded URL
         );
