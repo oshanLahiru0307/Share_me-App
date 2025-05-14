@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface UserRepo extends MongoRepository<UserEntity, String> {
     //user find by email...
     Optional<UserEntity> findByEmail(String email);
+    Boolean existsByEmail(String email);
 
     //@Query("{ '_id' : { '$nin' : ?0 }, '_id' : { '$ne' : ?1 } }")
     //List<UserEntity> findByIdNotInAndIdNot(List<String> ids, String currentUserId);

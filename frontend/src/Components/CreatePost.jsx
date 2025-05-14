@@ -96,8 +96,8 @@ const CreatePost = () => {
             setCaption('');
             setFileList([]);
             form.resetFields();
-            message.success('Post created successfully!');
             window.location.reload();
+            message.success('Post created successfully!');
         } catch (error) {
             console.error('Error creating post:', error);
             message.error('Failed to create post.');

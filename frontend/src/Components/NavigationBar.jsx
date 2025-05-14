@@ -2,7 +2,7 @@ import React from 'react'
 import { Avatar, Dropdown, Input, Menu } from 'antd'
 import { Link } from 'react-router-dom'
 import logo from '../assets/airbnb_1724634.png'
-import { HomeFilled, UsergroupAddOutlined, MessageOutlined, BellOutlined, SlackOutlined, LaptopOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons'
+import { HomeFilled, UsergroupAddOutlined, HomeOutlined , MessageOutlined, BellOutlined, SlackOutlined, LaptopOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons'
 import { useSnapshot } from 'valtio'
 import userState from '../State/UserState'
 import { useState, useEffect } from 'react'
@@ -69,7 +69,7 @@ const NavigationBar = () => {
           <ul className='flex items-center space-x-12'>
             <li>
               <Link className='flex flex-col items-center gap-2 text-black' to="/home">
-                <HomeFilled />
+                <HomeOutlined />
                 <p className='text-xs font-semibold'>Home</p>
               </Link>
             </li>
@@ -83,12 +83,6 @@ const NavigationBar = () => {
               <Link className='flex flex-col items-center gap-2' to="/events">
                 <SlackOutlined />
                 <p className='text-xs font-semibold'>Events</p>
-              </Link>
-            </li>
-            <li>
-              <Link className='flex flex-col items-center gap-2' to="message">
-                <MessageOutlined />
-                <p className='text-xs font-semibold'>Message</p>
               </Link>
             </li>
             <li>

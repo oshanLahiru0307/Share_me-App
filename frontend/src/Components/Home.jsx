@@ -27,6 +27,7 @@ const Home = () => {
       console.error('Error fetching posts:', error)
     }
   }
+  
 
   useEffect(() => {
     fetchPosts()
